@@ -1,0 +1,1696 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+type Product = {
+  id: number;
+  name: string;
+  sku?: string | null;
+};
+
+type OrderItem = {
+  id: number;
+  quantity: number;
+  price: number;
+  product: Product;
+  personalization?: string | null;
+  personalizationData?: string | null;
+  personalizationImageUrl?: string | null;
+};
+
+type User = {
+  id: number;
+  name?: string | null;
+  email?: string | null;
+};
+
+type Order = {
+  id: number;
+  orderId?: string | null;
+  orderNumber?: string | null;
+  status: string;
+  paymentMethod?: string | null;
+  total: number;
+  discount?: number | null;
+  trackingNumber?: string | null;
+  trackingWebsite?: string | null;
+  address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  pincode?: string | null;
+  phone?: string | null;
+  createdAt: string;
+  user: User;
+  items: OrderItem[];
+};
+
+const statuses = [
+  "PENDING",
+  "CONFIRMED",
+  "PROCESSING",
+  "SHIPPED",
+  "DELIVERED",
+  "PAYMENT_FAILED",
+  "CANCELLED",
+];
+
+function parsePersonalizationData(value?: string | null) {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed)
+      ? parsed.filter(
+          (item) =>
+            item &&
+            typeof item.label === "string" &&
+            typeof item.value === "string" &&
+            item.value
+        )
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function statusClass(status: string) {
+  return `zelora-order-status zelora-order-status-${status.toLowerCase()}`;
+}
+
+export default function OrdersPage() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState<number | null>(null);
+  const [savingTracking, setSavingTracking] = useState<number | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  async function loadOrders() {
+    try {
+      setLoading(true);
+      setLoadError(null);
+
+      const response = await fetch("/api/admin/orders", {
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      const raw = await response.text();
+
+      let data: any = null;
+
+      if (raw.trim()) {
+        try {
+          data = JSON.parse(raw);
+        } catch {
+          throw new Error(
+            `Orders API returned a non-JSON response (HTTP ${response.status}).`
+          );
+        }
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          data?.message ||
+            `Failed to load orders (HTTP ${response.status}).`
+        );
+      }
+
+      if (!data || data.success !== true) {
+        throw new Error(data?.message || "Failed to load orders.");
+      }
+
+      setOrders(Array.isArray(data.orders) ? data.orders : []);
+    } catch (error) {
+      console.error("Failed to load orders:", error);
+      setOrders([]);
+
+      setLoadError(
+        error instanceof Error
+          ? error.message
+          : "Failed to load orders."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadOrders();
+  }, []);
+
+  async function updateStatus(id: number, status: string) {
+    try {
+      setUpdating(id);
+
+      const response = await fetch("/api/admin/orders", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+          status,
+        }),
+      });
+
+      const raw = await response.text();
+
+      let data: any = null;
+
+      if (raw.trim()) {
+        try {
+          data = JSON.parse(raw);
+        } catch {
+          throw new Error(
+            `Order status API returned a non-JSON response (HTTP ${response.status}).`
+          );
+        }
+      }
+
+      if (!response.ok || !data?.success) {
+        throw new Error(
+          data?.message || `Failed to update order (HTTP ${response.status}).`
+        );
+      }
+
+      setOrders((current) =>
+        current.map((order) =>
+          order.id === id
+            ? {
+                ...order,
+                status,
+                trackingNumber:
+                  data.order?.trackingNumber ?? order.trackingNumber ?? null,
+                trackingWebsite:
+                  data.order?.trackingWebsite ?? order.trackingWebsite ?? null,
+              }
+            : order
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update order:", error);
+      alert("Failed to update order");
+    } finally {
+      setUpdating(null);
+    }
+  }
+
+  async function saveTrackingDetails(order: Order) {
+    const trackingNumber = String(order.trackingNumber || "").trim();
+    const trackingWebsite = String(order.trackingWebsite || "").trim();
+
+    if (!trackingNumber || !trackingWebsite) {
+      alert("Please enter both the tracking number and tracking website.");
+      return;
+    }
+
+    try {
+      setSavingTracking(order.id);
+
+      const response = await fetch("/api/admin/orders", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: order.id,
+          status: order.status,
+          trackingNumber,
+          trackingWebsite,
+        }),
+      });
+
+      const raw = await response.text();
+
+      let data: any = null;
+
+      if (raw.trim()) {
+        try {
+          data = JSON.parse(raw);
+        } catch {
+          throw new Error(
+            `Tracking API returned a non-JSON response (HTTP ${response.status}).`
+          );
+        }
+      }
+
+      if (!response.ok || !data?.success) {
+        throw new Error(
+          data?.message ||
+            `Failed to save tracking details (HTTP ${response.status}).`
+        );
+      }
+
+      setOrders((current) =>
+        current.map((currentOrder) =>
+          currentOrder.id === order.id
+            ? {
+                ...currentOrder,
+                trackingNumber:
+                  data.order?.trackingNumber ?? trackingNumber,
+                trackingWebsite:
+                  data.order?.trackingWebsite ?? trackingWebsite,
+              }
+            : currentOrder
+        )
+      );
+    } catch (error) {
+      console.error("Failed to save tracking details:", error);
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Failed to save tracking details."
+      );
+    } finally {
+      setSavingTracking(null);
+    }
+  }
+
+  function downloadPersonalizationImage(
+    orderId: number,
+    itemId: number
+  ) {
+    window.open(
+      `/api/admin/orders/${orderId}/personalization-image?itemId=${itemId}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+
+  function calculateTotal(order: Order) {
+    return Number(order.total ?? 0);
+  }
+
+  function formatDate(date: string) {
+    return new Date(date).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  }
+
+  const totalOrders = orders.length;
+  const pendingOrders = orders.filter(
+    (order) => order.status === "PENDING"
+  ).length;
+  const processingOrders = orders.filter((order) =>
+    ["CONFIRMED", "PROCESSING"].includes(order.status)
+  ).length;
+  const deliveredOrders = orders.filter(
+    (order) => order.status === "DELIVERED"
+  ).length;
+
+  return (
+    <main className="zelora-admin zelora-orders-page">
+      <style jsx global>{`
+        .zelora-orders-page {
+          min-height: 100vh;
+          padding: 52px 32px 90px;
+          color: #f5f2eb;
+          background:
+            radial-gradient(
+              circle at 88% 0%,
+              rgba(212, 175, 85, 0.11),
+              transparent 30%
+            ),
+            radial-gradient(
+              circle at 5% 85%,
+              rgba(212, 175, 85, 0.045),
+              transparent 26%
+            ),
+            #050505;
+        }
+
+        .zelora-orders-shell {
+          width: min(1450px, 100%);
+          margin: 0 auto;
+        }
+
+        .zelora-orders-top {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 24px;
+          margin-bottom: 34px;
+        }
+
+        .zelora-orders-eyebrow {
+          margin: 0 0 10px;
+          color: #d4af55;
+          font-size: 9px;
+          font-weight: 800;
+          letter-spacing: 0.24em;
+          text-transform: uppercase;
+        }
+
+        .zelora-orders-title {
+          margin: 0;
+          font-family: "Cormorant Garamond", Georgia, serif;
+          font-size: clamp(48px, 6vw, 78px);
+          font-weight: 400;
+          line-height: 0.9;
+          letter-spacing: -0.045em;
+        }
+
+        .zelora-orders-subtitle {
+          margin: 15px 0 0;
+          color: rgba(245, 242, 235, 0.48);
+          font-size: 13px;
+        }
+
+        .zelora-refresh-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 9px;
+          min-width: 126px;
+          height: 46px;
+          padding: 0 19px;
+          border: 1px solid rgba(212, 175, 85, 0.45);
+          border-radius: 999px;
+          background: linear-gradient(
+            135deg,
+            #e8c878,
+            #d4af55
+          );
+          color: #090909;
+          font-size: 9px;
+          font-weight: 900;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          box-shadow:
+            0 12px 35px rgba(212, 175, 85, 0.12);
+          transition:
+            transform 180ms ease,
+            box-shadow 180ms ease,
+            filter 180ms ease;
+        }
+
+        .zelora-refresh-button:hover {
+          transform: translateY(-2px);
+          filter: brightness(1.06);
+          box-shadow:
+            0 16px 42px rgba(212, 175, 85, 0.2);
+        }
+
+        .zelora-refresh-button:disabled {
+          opacity: 0.6;
+          cursor: wait;
+          transform: none;
+        }
+
+        .zelora-refresh-icon {
+          font-size: 15px;
+          line-height: 1;
+        }
+
+        .zelora-order-stats {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 14px;
+          margin-bottom: 24px;
+        }
+
+        .zelora-order-stat {
+          min-height: 128px;
+          padding: 21px 22px;
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          border-radius: 18px;
+          background:
+            linear-gradient(
+              145deg,
+              rgba(255, 255, 255, 0.045),
+              rgba(255, 255, 255, 0.018)
+            );
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.025);
+        }
+
+        .zelora-order-stat-label {
+          margin: 0;
+          color: rgba(245, 242, 235, 0.38);
+          font-size: 8px;
+          font-weight: 800;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+        }
+
+        .zelora-order-stat-value {
+          margin: 17px 0 0;
+          font-family: "Cormorant Garamond", Georgia, serif;
+          font-size: 40px;
+          line-height: 1;
+          font-weight: 500;
+        }
+
+        .zelora-order-stat-note {
+          margin: 6px 0 0;
+          color: rgba(245, 242, 235, 0.38);
+          font-size: 10px;
+        }
+
+        .zelora-orders-panel {
+          overflow: hidden;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 22px;
+          background: rgba(255, 255, 255, 0.018);
+          box-shadow:
+            0 25px 80px rgba(0, 0, 0, 0.28),
+            inset 0 1px 0 rgba(255, 255, 255, 0.025);
+        }
+
+        .zelora-orders-panel-head {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 20px;
+          padding: 22px 25px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.018);
+        }
+
+        .zelora-orders-panel-title {
+          margin: 0;
+          font-family: "Cormorant Garamond", Georgia, serif;
+          font-size: 25px;
+          font-weight: 500;
+        }
+
+        .zelora-orders-panel-count {
+          margin: 4px 0 0;
+          color: rgba(245, 242, 235, 0.4);
+          font-size: 10px;
+        }
+
+        .zelora-orders-list {
+          display: grid;
+          gap: 0;
+        }
+
+        .zelora-order-card {
+          position: relative;
+          padding: 28px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+          background:
+            radial-gradient(
+              circle at 95% 0%,
+              rgba(212, 175, 85, 0.035),
+              transparent 28%
+            );
+          transition:
+            background 220ms ease,
+            border-color 220ms ease;
+        }
+
+        .zelora-order-card:last-child {
+          border-bottom: 0;
+        }
+
+        .zelora-order-card:hover {
+          background:
+            radial-gradient(
+              circle at 95% 0%,
+              rgba(212, 175, 85, 0.07),
+              transparent 30%
+            ),
+            rgba(255, 255, 255, 0.018);
+        }
+
+        .zelora-order-head {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto auto;
+          align-items: start;
+          gap: 28px;
+        }
+
+        .zelora-order-number-row {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 11px;
+        }
+
+        .zelora-order-number {
+          margin: 0;
+          color: #f5f2eb;
+          font-family: "Cormorant Garamond", Georgia, serif;
+          font-size: 29px;
+          font-weight: 500;
+          line-height: 1;
+        }
+
+        .zelora-order-date {
+          margin: 8px 0 0;
+          color: rgba(245, 242, 235, 0.35);
+          font-size: 10px;
+          letter-spacing: 0.04em;
+        }
+
+        .zelora-order-status {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 26px;
+          padding: 0 11px;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.035);
+          color: rgba(245, 242, 235, 0.62);
+          font-size: 7px;
+          font-weight: 900;
+          letter-spacing: 0.15em;
+        }
+
+        .zelora-order-status-pending {
+          color: #dcb969;
+          border-color: rgba(220, 185, 105, 0.32);
+          background: rgba(220, 185, 105, 0.08);
+        }
+
+        .zelora-order-status-confirmed,
+        .zelora-order-status-processing {
+          color: #9dbde4;
+          border-color: rgba(120, 165, 220, 0.28);
+          background: rgba(120, 165, 220, 0.07);
+        }
+
+        .zelora-order-status-shipped {
+          color: #bba8e8;
+          border-color: rgba(160, 135, 220, 0.28);
+          background: rgba(160, 135, 220, 0.07);
+        }
+
+        .zelora-order-status-delivered {
+          color: #91d7bf;
+          border-color: rgba(100, 210, 170, 0.28);
+          background: rgba(100, 210, 170, 0.07);
+        }
+
+        .zelora-order-status-payment_failed {
+          color: #e39a82;
+          border-color: rgba(227, 154, 130, 0.3);
+          background: rgba(227, 154, 130, 0.075);
+        }
+
+        .zelora-order-status-cancelled {
+          color: #d7a1a1;
+          border-color: rgba(215, 161, 161, 0.28);
+          background: rgba(215, 161, 161, 0.065);
+        }
+
+        .zelora-customer-block {
+          min-width: 250px;
+        }
+
+        .zelora-order-section-label {
+          margin: 0 0 9px;
+          color: rgba(245, 242, 235, 0.32);
+          font-size: 8px;
+          font-weight: 800;
+          letter-spacing: 0.19em;
+          text-transform: uppercase;
+        }
+
+        .zelora-customer-name {
+          margin: 0;
+          color: #f5f2eb;
+          font-size: 13px;
+          font-weight: 600;
+        }
+
+        .zelora-customer-detail {
+          margin: 5px 0 0;
+          color: rgba(245, 242, 235, 0.46);
+          font-size: 10px;
+          line-height: 1.55;
+        }
+
+        .zelora-order-total {
+          min-width: 175px;
+          text-align: right;
+        }
+
+        .zelora-order-total-label {
+          margin: 0;
+          color: rgba(245, 242, 235, 0.32);
+          font-size: 8px;
+          font-weight: 800;
+          letter-spacing: 0.19em;
+          text-transform: uppercase;
+        }
+
+        .zelora-order-total-value {
+          margin: 7px 0 0;
+          color: #e8c878;
+          font-family: "Cormorant Garamond", Georgia, serif;
+          font-size: 34px;
+          font-weight: 500;
+          line-height: 1;
+        }
+
+        .zelora-order-total-items {
+          margin: 7px 0 0;
+          color: rgba(245, 242, 235, 0.36);
+          font-size: 18px;
+        }
+
+        .zelora-order-info-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 10px;
+          margin-top: 23px;
+        }
+
+        /*
+         * DELIVERY ADDRESS FIX
+         * The address now occupies the complete row on desktop,
+         * removing the large unused space beside it.
+         */
+        .zelora-order-info-grid > .zelora-order-info:last-child {
+          grid-column: 1 / -1;
+        }
+
+        .zelora-order-info {
+          min-height: 68px;
+          padding: 14px 15px;
+          border: 1px solid rgba(255, 255, 255, 0.065);
+          border-radius: 13px;
+          background: rgba(255, 255, 255, 0.018);
+        }
+
+        .zelora-order-info-label {
+          margin: 0 0 6px;
+          color: rgba(245, 242, 235, 0.28);
+          font-size: 7px;
+          font-weight: 800;
+          letter-spacing: 0.17em;
+          text-transform: uppercase;
+        }
+
+        .zelora-order-info-value {
+          margin: 0;
+          color: rgba(245, 242, 235, 0.78);
+          font-size: 15px;
+          line-height: 1.55;
+          word-break: break-word;
+        }
+
+        .zelora-order-address {
+          white-space: pre-line;
+        }
+
+        .zelora-order-status-area {
+          display: flex;
+          align-items: end;
+          gap: 12px;
+          margin-top: 22px;
+        }
+
+        .zelora-tracking-admin-section {
+          margin-top: 16px;
+          padding: 17px;
+          border: 1px solid rgba(212, 175, 85, 0.16);
+          border-radius: 15px;
+          background: linear-gradient(
+            145deg,
+            rgba(212, 175, 85, 0.045),
+            rgba(255, 255, 255, 0.018)
+          );
+        }
+
+        .zelora-tracking-admin-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          gap: 12px;
+        }
+
+        .zelora-tracking-admin-field {
+          min-width: 0;
+        }
+
+        .zelora-tracking-admin-label {
+          display: block;
+          margin: 0 0 7px;
+          color: rgba(245, 242, 235, 0.34);
+          font-size: 7px;
+          font-weight: 800;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+        }
+
+        .zelora-tracking-admin-input {
+          width: 100%;
+          height: 43px;
+          padding: 0 13px;
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          border-radius: 11px;
+          outline: none;
+          background: rgba(255, 255, 255, 0.028);
+          color: #f5f2eb;
+          font-size: 10px;
+          transition:
+            border-color 180ms ease,
+            background 180ms ease;
+        }
+
+        .zelora-tracking-admin-input::placeholder {
+          color: rgba(245, 242, 235, 0.22);
+        }
+
+        .zelora-tracking-admin-input:focus {
+          border-color: rgba(212, 175, 85, 0.45);
+          background: rgba(212, 175, 85, 0.045);
+        }
+
+        .zelora-tracking-admin-actions {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 12px;
+        }
+
+        .zelora-tracking-save-button {
+          min-height: 39px;
+          padding: 0 16px;
+          border: 1px solid rgba(212, 175, 85, 0.4);
+          border-radius: 999px;
+          background: rgba(212, 175, 85, 0.075);
+          color: #e8c878;
+          font-size: 8px;
+          font-weight: 900;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition:
+            transform 180ms ease,
+            border-color 180ms ease,
+            background 180ms ease;
+        }
+
+        .zelora-tracking-save-button:hover {
+          transform: translateY(-1px);
+          border-color: rgba(212, 175, 85, 0.62);
+          background: rgba(212, 175, 85, 0.12);
+        }
+
+        .zelora-tracking-save-button:disabled {
+          opacity: 0.55;
+          cursor: wait;
+          transform: none;
+        }
+
+        .zelora-order-status-control {
+          width: min(330px, 100%);
+        }
+
+        .zelora-order-select-wrap {
+          position: relative;
+        }
+
+        .zelora-order-select {
+          width: 100%;
+          height: 44px;
+          appearance: none;
+          padding: 0 42px 0 14px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          outline: none;
+          background: rgba(255, 255, 255, 0.035);
+          color: #f5f2eb;
+          font-size: 10px;
+          cursor: pointer;
+          transition:
+            border-color 180ms ease,
+            background 180ms ease;
+        }
+
+        .zelora-order-select:hover,
+        .zelora-order-select:focus {
+          border-color: rgba(212, 175, 85, 0.42);
+          background: rgba(212, 175, 85, 0.055);
+        }
+
+        .zelora-order-select:disabled {
+          opacity: 0.55;
+          cursor: wait;
+        }
+
+        .zelora-order-select option {
+          background: #111;
+          color: #f5f2eb;
+        }
+
+        .zelora-order-select-arrow {
+          position: absolute;
+          right: 15px;
+          top: 50%;
+          pointer-events: none;
+          color: #d4af55;
+          transform: translateY(-50%);
+          font-size: 11px;
+        }
+
+        .zelora-order-products {
+          margin-top: 25px;
+          padding-top: 22px;
+          border-top: 1px solid rgba(255, 255, 255, 0.075);
+        }
+
+        .zelora-product-list {
+          display: grid;
+          gap: 7px;
+        }
+
+        .zelora-product-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 20px;
+          min-height: 52px;
+          padding: 10px 14px;
+          border: 1px solid rgba(255, 255, 255, 0.055);
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.018);
+          transition:
+            border-color 180ms ease,
+            background 180ms ease;
+        }
+
+        .zelora-product-row:hover {
+          border-color: rgba(212, 175, 85, 0.18);
+          background: rgba(212, 175, 85, 0.035);
+        }
+
+        .zelora-product-name {
+          color: rgba(245, 242, 235, 0.88);
+          font-size: 11px;
+          font-weight: 600;
+        }
+
+        .zelora-product-quantity {
+          margin-left: 9px;
+          color: rgba(245, 242, 235, 0.35);
+          font-size: 9px;
+        }
+
+        .zelora-product-sku {
+          margin-top: 5px;
+          color: rgba(212, 175, 85, 0.68);
+          font-size: 8px;
+          font-weight: 700;
+          letter-spacing: 0.11em;
+          text-transform: uppercase;
+        }
+
+        .zelora-product-price {
+          color: #e8c878;
+          font-size: 10px;
+          font-weight: 600;
+          white-space: nowrap;
+        }
+
+        /* PERSONALIZATION */
+        .zelora-personalization-section {
+          margin-top: 25px;
+          padding-top: 22px;
+          border-top: 1px solid rgba(255, 255, 255, 0.075);
+        }
+
+        .zelora-personalization-list {
+          display: grid;
+          gap: 10px;
+        }
+
+        .zelora-personalization-card {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          gap: 18px;
+          padding: 16px;
+          border: 1px solid rgba(212, 175, 85, 0.16);
+          border-radius: 15px;
+          background:
+            linear-gradient(
+              145deg,
+              rgba(212, 175, 85, 0.045),
+              rgba(255, 255, 255, 0.018)
+            );
+        }
+
+        .zelora-personalization-product {
+          margin: 0;
+          color: #f5f2eb;
+          font-size: 11px;
+          font-weight: 700;
+        }
+
+        .zelora-personalization-fields {
+          display: grid;
+          gap: 7px;
+          margin-top: 11px;
+        }
+
+        .zelora-personalization-field {
+          display: flex;
+          align-items: baseline;
+          gap: 8px;
+          color: rgba(245, 242, 235, 0.72);
+          font-size: 10px;
+          line-height: 1.55;
+        }
+
+        .zelora-personalization-field strong {
+          flex: 0 0 auto;
+          color: rgba(245, 242, 235, 0.36);
+          font-size: 8px;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .zelora-personalization-image {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-top: 13px;
+          padding-top: 12px;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .zelora-personalization-thumb {
+          width: 76px;
+          height: 76px;
+          flex: 0 0 76px;
+          overflow: hidden;
+          border: 1px solid rgba(212, 175, 85, 0.2);
+          border-radius: 11px;
+          background: #090909;
+        }
+
+        .zelora-personalization-thumb img {
+          width: 100%;
+          height: 100%;
+          display: block;
+          object-fit: cover;
+        }
+
+        .zelora-personalization-image-meta {
+          min-width: 0;
+        }
+
+        .zelora-personalization-image-label {
+          margin: 0 0 4px;
+          color: rgba(245, 242, 235, 0.34);
+          font-size: 7px;
+          font-weight: 800;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+        }
+
+        .zelora-personalization-image-name {
+          margin: 0;
+          color: rgba(245, 242, 235, 0.7);
+          font-size: 9px;
+          word-break: break-all;
+        }
+
+        .zelora-personalization-actions {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          flex-wrap: wrap;
+          gap: 9px;
+        }
+
+        .zelora-download-button {
+          min-height: 40px;
+          padding: 0 15px;
+          border: 1px solid rgba(212, 175, 85, 0.38);
+          border-radius: 999px;
+          background: rgba(212, 175, 85, 0.075);
+          color: #e8c878;
+          font-size: 8px;
+          font-weight: 900;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition:
+            transform 180ms ease,
+            border-color 180ms ease,
+            background 180ms ease;
+        }
+
+        .zelora-download-button:hover {
+          transform: translateY(-1px);
+          border-color: rgba(212, 175, 85, 0.62);
+          background: rgba(212, 175, 85, 0.12);
+        }
+
+        .zelora-personalization-empty {
+          padding: 13px 15px;
+          border: 1px solid rgba(255, 255, 255, 0.055);
+          border-radius: 12px;
+          color: rgba(245, 242, 235, 0.35);
+          background: rgba(255, 255, 255, 0.012);
+          font-size: 9px;
+        }
+
+        .zelora-orders-empty,
+        .zelora-orders-loading {
+          padding: 85px 30px;
+          text-align: center;
+        }
+
+        .zelora-empty-icon {
+          width: 54px;
+          height: 54px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 17px;
+          border: 1px solid rgba(212, 175, 85, 0.25);
+          border-radius: 50%;
+          color: #d4af55;
+          background: rgba(212, 175, 85, 0.045);
+          font-size: 20px;
+        }
+
+        .zelora-empty-title {
+          margin: 0;
+          font-family: "Cormorant Garamond", Georgia, serif;
+          font-size: 26px;
+          font-weight: 500;
+        }
+
+        .zelora-empty-text {
+          margin: 7px 0 0;
+          color: rgba(245, 242, 235, 0.36);
+          font-size: 10px;
+        }
+
+        .zelora-loading-dot {
+          width: 9px;
+          height: 9px;
+          display: inline-block;
+          margin-right: 9px;
+          border-radius: 50%;
+          background: #d4af55;
+          box-shadow: 0 0 16px rgba(212, 175, 85, 0.55);
+          animation: zelora-order-pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes zelora-order-pulse {
+          0%, 100% {
+            opacity: 0.35;
+            transform: scale(0.85);
+          }
+
+          50% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @media (max-width: 1000px) {
+          .zelora-order-stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+
+          .zelora-order-head {
+            grid-template-columns: 1fr 1fr;
+          }
+
+          .zelora-order-total {
+            text-align: left;
+          }
+
+          .zelora-customer-block {
+            grid-column: 1 / -1;
+          }
+        }
+
+        @media (max-width: 700px) {
+          .zelora-personalization-card {
+            grid-template-columns: 1fr;
+          }
+
+          .zelora-personalization-actions {
+            justify-content: flex-start;
+          }
+
+          .zelora-download-button {
+            width: 100%;
+          }
+
+          .zelora-orders-page {
+            padding: 30px 16px 65px;
+          }
+
+          .zelora-orders-top {
+            align-items: flex-start;
+            flex-direction: column;
+          }
+
+          .zelora-refresh-button {
+            width: 100%;
+          }
+
+          .zelora-order-stats {
+            grid-template-columns: 1fr 1fr;
+          }
+
+          .zelora-orders-panel-head {
+            padding: 19px;
+          }
+
+          .zelora-order-card {
+            padding: 20px;
+          }
+
+          .zelora-order-head {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
+
+          .zelora-order-total {
+            text-align: left;
+          }
+
+          .zelora-order-info-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .zelora-order-info-grid > .zelora-order-info:last-child {
+            grid-column: auto;
+          }
+
+          .zelora-order-status-control {
+            width: 100%;
+          }
+
+          .zelora-tracking-admin-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .zelora-tracking-admin-actions {
+            justify-content: stretch;
+          }
+
+          .zelora-tracking-save-button {
+            width: 100%;
+          }
+
+          .zelora-product-row {
+            align-items: flex-start;
+          }
+        }
+
+        @media (max-width: 430px) {
+          .zelora-order-stats {
+            grid-template-columns: 1fr;
+          }
+
+          .zelora-orders-title {
+            font-size: 52px;
+          }
+        }
+      `}</style>
+
+      <div className="zelora-orders-shell">
+        <div className="zelora-orders-top">
+          <div>
+            <p className="zelora-orders-eyebrow">ZELORA ADMIN / ORDERS</p>
+            <h1 className="zelora-orders-title">Orders</h1>
+            <p className="zelora-orders-subtitle">
+              Manage and track ZELORA customer orders.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={loadOrders}
+            disabled={loading}
+            className="zelora-refresh-button"
+          >
+            <span className="zelora-refresh-icon">↻</span>
+            {loading ? "Loading" : "Refresh"}
+          </button>
+        </div>
+
+        <div className="zelora-order-stats">
+          <div className="zelora-order-stat">
+            <p className="zelora-order-stat-label">Total Orders</p>
+            <p className="zelora-order-stat-value">{totalOrders}</p>
+            <p className="zelora-order-stat-note">All customer orders</p>
+          </div>
+
+          <div className="zelora-order-stat">
+            <p className="zelora-order-stat-label">Pending</p>
+            <p className="zelora-order-stat-value">{pendingOrders}</p>
+            <p className="zelora-order-stat-note">Awaiting confirmation</p>
+          </div>
+
+          <div className="zelora-order-stat">
+            <p className="zelora-order-stat-label">Processing</p>
+            <p className="zelora-order-stat-value">{processingOrders}</p>
+            <p className="zelora-order-stat-note">
+              Confirmed / processing
+            </p>
+          </div>
+
+          <div className="zelora-order-stat">
+            <p className="zelora-order-stat-label">Delivered</p>
+            <p className="zelora-order-stat-value">{deliveredOrders}</p>
+            <p className="zelora-order-stat-note">
+              Successfully completed
+            </p>
+          </div>
+        </div>
+
+        <section className="zelora-orders-panel">
+          <div className="zelora-orders-panel-head">
+            <div>
+              <h2 className="zelora-orders-panel-title">
+                Customer Orders
+              </h2>
+              <p className="zelora-orders-panel-count">
+                {orders.length} order
+                {orders.length !== 1 ? "s" : ""} in your store
+              </p>
+            </div>
+          </div>
+
+          {loadError && !loading ? (
+            <div className="zelora-orders-empty">
+              <div className="zelora-empty-icon">!</div>
+              <h2 className="zelora-empty-title">
+                Unable to load orders
+              </h2>
+              <p className="zelora-empty-text">{loadError}</p>
+              <button
+                type="button"
+                onClick={loadOrders}
+                className="zelora-refresh-button"
+                style={{ marginTop: "22px" }}
+              >
+                Try Again
+              </button>
+            </div>
+          ) : loading ? (
+            <div className="zelora-orders-loading">
+              <p className="zelora-empty-text">
+                <span className="zelora-loading-dot" />
+                Loading orders...
+              </p>
+            </div>
+          ) : orders.length === 0 ? (
+            <div className="zelora-orders-empty">
+              <div className="zelora-empty-icon">◇</div>
+              <h2 className="zelora-empty-title">No orders yet</h2>
+              <p className="zelora-empty-text">
+                Orders will appear here when customers place them.
+              </p>
+            </div>
+          ) : (
+            <div className="zelora-orders-list">
+              {orders.map((order) => (
+                <article
+                  key={order.id}
+                  className="zelora-order-card"
+                >
+                  <div className="zelora-order-head">
+                    <div>
+                      <div className="zelora-order-number-row">
+                        <h2 className="zelora-order-number">
+                          Order #{order.orderId || order.id}
+                        </h2>
+
+                        <span className={statusClass(order.status)}>
+                          {order.status}
+                        </span>
+                      </div>
+
+                      <p className="zelora-order-date">
+                        {formatDate(order.createdAt)}
+                      </p>
+                    </div>
+
+                    <div className="zelora-customer-block">
+                      <p className="zelora-order-section-label">
+                        Customer
+                      </p>
+                      <p className="zelora-customer-name">
+                        {order.user?.name || "Customer"}
+                      </p>
+
+                      {order.user?.email && (
+                        <p className="zelora-customer-detail">
+                          {order.user.email}
+                        </p>
+                      )}
+
+                      <p className="zelora-customer-detail">
+                        {order.phone || "No phone provided"}
+                      </p>
+                    </div>
+
+                    <div className="zelora-order-total">
+                      <p className="zelora-order-total-label">
+                        Order Total
+                      </p>
+                      <p className="zelora-order-total-value">
+                        ₹{calculateTotal(order).toFixed(2)}
+                      </p>
+                      <p className="zelora-order-total-items">
+                        {order.items.length} item
+                        {order.items.length !== 1 ? "s" : ""}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="zelora-order-info-grid">
+                    <div className="zelora-order-info">
+                      <p className="zelora-order-info-label">
+                        Email
+                      </p>
+                      <p className="zelora-order-info-value">
+                        {order.user?.email || "Not provided"}
+                      </p>
+                    </div>
+
+                    <div className="zelora-order-info">
+                      <p className="zelora-order-info-label">
+                        Phone
+                      </p>
+                      <p className="zelora-order-info-value">
+                        {order.phone || "Not provided"}
+                      </p>
+                    </div>
+
+                    <div className="zelora-order-info">
+                      <p className="zelora-order-info-label">
+                        Payment Method
+                      </p>
+                      <p className="zelora-order-info-value">
+                        {order.paymentMethod
+                          ? order.paymentMethod.toUpperCase()
+                          : "Not provided"}
+                      </p>
+                    </div>
+
+                    <div className="zelora-order-info">
+                      <p className="zelora-order-info-label">
+                        Delivery Address
+                      </p>
+                      <p className="zelora-order-info-value zelora-order-address">
+                        {[
+                          order.address,
+                          order.city,
+                          order.state,
+                          order.pincode
+                            ? `PIN ${order.pincode}`
+                            : null,
+                        ]
+                          .filter(Boolean)
+                          .join(", ") || "Not provided"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="zelora-order-status-area">
+                    <div className="zelora-order-status-control">
+                      <p className="zelora-order-section-label">
+                        Order Status
+                      </p>
+
+                      <div className="zelora-order-select-wrap">
+                        <select
+                          value={order.status}
+                          disabled={updating === order.id}
+                          onChange={(event) =>
+                            updateStatus(
+                              order.id,
+                              event.target.value
+                            )
+                          }
+                          className="zelora-order-select"
+                        >
+                          {statuses.map((status) => (
+                            <option
+                              key={status}
+                              value={status}
+                            >
+                              {status}
+                            </option>
+                          ))}
+                        </select>
+
+                        <span className="zelora-order-select-arrow">
+                          ⌄
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {order.status === "SHIPPED" && (
+                    <section className="zelora-tracking-admin-section">
+                      <p className="zelora-order-section-label">
+                        Shipment Tracking
+                      </p>
+
+                      <div className="zelora-tracking-admin-grid">
+                        <label className="zelora-tracking-admin-field">
+                          <span className="zelora-tracking-admin-label">
+                            Tracking Number
+                          </span>
+                          <input
+                            type="text"
+                            value={order.trackingNumber || ""}
+                            onChange={(event) =>
+                              setOrders((current) =>
+                                current.map((currentOrder) =>
+                                  currentOrder.id === order.id
+                                    ? {
+                                        ...currentOrder,
+                                        trackingNumber:
+                                          event.target.value,
+                                      }
+                                    : currentOrder
+                                )
+                              )
+                            }
+                            placeholder="Enter tracking number"
+                            className="zelora-tracking-admin-input"
+                          />
+                        </label>
+
+                        <label className="zelora-tracking-admin-field">
+                          <span className="zelora-tracking-admin-label">
+                            Tracking Website
+                          </span>
+                          <input
+                            type="url"
+                            value={order.trackingWebsite || ""}
+                            onChange={(event) =>
+                              setOrders((current) =>
+                                current.map((currentOrder) =>
+                                  currentOrder.id === order.id
+                                    ? {
+                                        ...currentOrder,
+                                        trackingWebsite:
+                                          event.target.value,
+                                      }
+                                    : currentOrder
+                                )
+                              )
+                            }
+                            placeholder="https://tracking.example.com/..."
+                            className="zelora-tracking-admin-input"
+                          />
+                        </label>
+                      </div>
+
+                      <div className="zelora-tracking-admin-actions">
+                        <button
+                          type="button"
+                          className="zelora-tracking-save-button"
+                          disabled={
+                            savingTracking === order.id
+                          }
+                          onClick={() =>
+                            saveTrackingDetails(order)
+                          }
+                        >
+                          {savingTracking === order.id
+                            ? "Saving"
+                            : "Save Tracking Details"}
+                        </button>
+                      </div>
+                    </section>
+                  )}
+
+                  {order.items.some(
+                    (item) =>
+                      item.personalization ||
+                      item.personalizationData ||
+                      item.personalizationImageUrl
+                  ) && (
+                    <section className="zelora-personalization-section">
+                      <p className="zelora-order-section-label">
+                        Personalization
+                      </p>
+
+                      <div className="zelora-personalization-list">
+                        {order.items
+                          .filter(
+                            (item) =>
+                              item.personalization ||
+                              item.personalizationData ||
+                              item.personalizationImageUrl
+                          )
+                          .map((item) => {
+                            const data =
+                              parsePersonalizationData(
+                                item.personalizationData
+                              );
+
+                            return (
+                              <div
+                                key={`personalization-${item.id}`}
+                                className="zelora-personalization-card"
+                              >
+                                <div>
+                                  <p className="zelora-personalization-product">
+                                    {item.product?.name ||
+                                      "Product"}
+                                    {item.quantity > 1
+                                      ? ` × ${item.quantity}`
+                                      : ""}
+                                  </p>
+
+                                  {data.length > 0 ? (
+                                    <div className="zelora-personalization-fields">
+                                      {data.map(
+                                        (field: any) => (
+                                          <div
+                                            key={`${item.id}-${field.id || field.label}`}
+                                            className="zelora-personalization-field"
+                                          >
+                                            <strong>
+                                              {field.label}
+                                            </strong>
+                                            <span>
+                                              {field.type ===
+                                              "image"
+                                                ? "Image uploaded"
+                                                : field.value}
+                                            </span>
+                                          </div>
+                                        )
+                                      )}
+                                    </div>
+                                  ) : item.personalization ? (
+                                    <div className="zelora-personalization-fields">
+                                      <div className="zelora-personalization-field">
+                                        <strong>
+                                          Details
+                                        </strong>
+                                        <span>
+                                          {item.personalization}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  ) : null}
+
+                                  {item.personalizationImageUrl && (
+                                    <div className="zelora-personalization-image">
+                                      <div className="zelora-personalization-thumb">
+                                        <img
+                                          src={
+                                            item.personalizationImageUrl
+                                          }
+                                          alt="Customer personalization"
+                                        />
+                                      </div>
+
+                                      <div className="zelora-personalization-image-meta">
+                                        <p className="zelora-personalization-image-label">
+                                          Customer image
+                                        </p>
+                                        <p className="zelora-personalization-image-name">
+                                          Original uploaded image
+                                        </p>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+
+                                {item.personalizationImageUrl && (
+                                  <div className="zelora-personalization-actions">
+                                    <button
+                                      type="button"
+                                      className="zelora-download-button"
+                                      onClick={() =>
+                                        downloadPersonalizationImage(
+                                          order.id,
+                                          item.id
+                                        )
+                                      }
+                                    >
+                                      ↓ Download Image
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </section>
+                  )}
+
+                  <div className="zelora-order-products">
+                    <p className="zelora-order-section-label">
+                      Products
+                    </p>
+
+                    <div className="zelora-product-list">
+                      {order.items.map((item) => (
+                        <div
+                          key={item.id}
+                          className="zelora-product-row"
+                        >
+                          <div>
+                            <span className="zelora-product-name">
+                              {item.product?.name || "Product"}
+                            </span>
+
+                            <span className="zelora-product-quantity">
+                              × {item.quantity}
+                            </span>
+
+                            {item.product?.sku && (
+                              <div className="zelora-product-sku">
+                                SKU: {item.product.sku}
+                              </div>
+                            )}
+                          </div>
+
+                          <span className="zelora-product-price">
+                            ₹
+                            {(
+                              item.price * item.quantity
+                            ).toFixed(2)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </main>
+  );
+}

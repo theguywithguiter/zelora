@@ -1,0 +1,14 @@
+[
+  {
+    "id": "default-1",
+    "url": "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=2200&q=90",
+    "position": 0,
+    "active": true
+  },
+  {
+    "id": "default-2",
+    "url": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=2200&q=90",
+    "position": 1,
+    "active": true
+  }
+]

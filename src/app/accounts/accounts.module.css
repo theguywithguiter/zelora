@@ -1,0 +1,634 @@
+.shell {
+  min-height: 100vh;
+  background: #080706;
+  color: #f5f1e8;
+  padding: 118px 28px 72px;
+}
+
+.inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  color: #f1a60e;
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+
+.title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 6vw, 76px);
+  font-weight: 400;
+  letter-spacing: -.04em;
+  line-height: .96;
+  margin: 0;
+}
+
+.sub {
+  color: rgba(245,241,232,.48);
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 16px 0 0;
+  max-width: 620px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  padding-bottom: 34px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.back {
+  color: rgba(245,241,232,.62);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  transition: .3s;
+}
+
+.back:hover {
+  color: #e6b33d;
+}
+
+/* Account detail pages use the full content width.
+   The old left navigation is intentionally removed. */
+.pageContent {
+  width: 100%;
+  padding-top: 46px;
+}
+
+.panel {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(213,177,93,.14);
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,.035),
+    rgba(255,255,255,.012)
+  );
+  border-radius: 22px;
+  padding: 30px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.28);
+}
+
+.panelTitle {
+  font-family: Georgia,"Times New Roman",serif;
+  font-size: 30px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.muted {
+  color: rgba(245,241,232,.45);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.label {
+  color: rgba(245,241,232,.38);
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.value {
+  font-size: 14px;
+}
+
+.button {
+  border: 1px solid rgba(213,177,93,.32);
+  background: transparent;
+  color: #f5f1e8;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.button:hover {
+  background: #eebf51;
+  color: #080706;
+  border-color: #e9b53c;
+}
+
+.button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+.danger {
+  border-color: rgba(220,90,90,.25);
+  color: #df9b9b;
+}
+
+.cards {
+  display: grid;
+  gap: 14px;
+}
+
+.order {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: 22px;
+  background: rgba(255,255,255,.018);
+}
+
+.orderHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.orderAmount {
+  text-align: right;
+}
+
+.orderAmount strong {
+  display: block;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: .01em;
+}
+
+.items {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.thumb {
+  width: 56px;
+  height: 68px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #161311;
+  flex: 0 0 56px;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.itemInfo {
+  min-width: 0;
+}
+
+.itemName {
+  font-size: 13px;
+}
+
+.price {
+  margin-left: auto;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.orderLower {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, .75fr);
+  gap: 0;
+  margin-top: 24px;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,.018);
+}
+
+.orderMeta {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  border-right: 1px solid rgba(255,255,255,.07);
+}
+
+.detailBlock {
+  padding: 20px 22px;
+  background: rgba(255,255,255,.012);
+}
+
+.orderMeta .detailBlock + .detailBlock {
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+
+.sectionLabel {
+  color: rgba(245,241,232,.38);
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.detailValue {
+  color: rgba(245,241,232,.78);
+  font-size: 12px;
+  line-height: 1.7;
+  max-width: 680px;
+}
+
+.breakup {
+  align-self: stretch;
+  margin: 0;
+  padding: 20px 22px;
+  background: linear-gradient(
+    145deg,
+    rgba(213,177,93,.045),
+    rgba(255,255,255,.008)
+  );
+}
+
+.breakupRows {
+  display: grid;
+  gap: 11px;
+}
+
+.breakupRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  color: rgba(245,241,232,.55);
+  font-size: 12px;
+}
+
+.discountValue {
+  color: #f4ba44;
+}
+
+.breakupTotal {
+  margin-top: 7px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  color: rgba(245,241,232,.9);
+  font-size: 13px;
+}
+
+.breakupTotal strong {
+  color: #f5f1e8;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.orderActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+
+.trackButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: 168px;
+  text-decoration: none;
+  padding: 13px 20px;
+  border-color: rgba(213,177,93,.34);
+  background: rgba(213,177,93,.035);
+}
+
+.trackButton span {
+  font-size: 13px;
+  line-height: 1;
+  transition: transform .3s ease;
+}
+
+.trackButton:hover span {
+  transform: translateX(3px);
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.product {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(255,255,255,.018);
+}
+
+.productImg {
+  aspect-ratio: .85;
+  background: #14110f;
+  overflow: hidden;
+}
+
+.productImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .7s;
+}
+
+.product:hover img {
+  transform: scale(1.04);
+}
+
+.productBody {
+  padding: 16px;
+}
+
+.productName {
+  font-family: Georgia,"Times New Roman",serif;
+  font-size: 18px;
+}
+
+.productMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  color: rgba(245,241,232,.55);
+  font-size: 12px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field.full {
+  grid-column: 1/-1;
+}
+
+.field label {
+  color: rgba(245,241,232,.42);
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.field input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(0,0,0,.18);
+  color: #f5f1e8;
+  border-radius: 12px;
+  padding: 14px;
+  outline: none;
+}
+
+.field input:focus {
+  border-color: rgba(213,177,93,.55);
+}
+
+.checkbox {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(245,241,232,.62);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.checkbox input {
+  accent-color: #fcca54;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.addressList {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.address {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: 22px;
+  background: rgba(255,255,255,.018);
+}
+
+.addressTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.badge {
+  display: inline-block;
+  border: 1px solid rgba(213,177,93,.25);
+  color: #dfae3b;
+  border-radius: 999px;
+  padding: 6px 9px;
+  font-size: 8px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.empty {
+  text-align: center;
+  padding: 70px 20px;
+  border: 1px dashed rgba(255,255,255,.1);
+  border-radius: 18px;
+  color: rgba(245,241,232,.45);
+  margin-top: 22px;
+}
+
+@media (max-width: 800px) {
+  .shell {
+    padding: 92px 18px 48px;
+  }
+
+  .top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .pageContent {
+    padding-top: 28px;
+  }
+
+  .panel {
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .productGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .field.full,
+  .checkbox {
+    grid-column: auto;
+  }
+
+  .orderHead {
+    flex-direction: column;
+  }
+
+  .orderAmount {
+    text-align: left;
+  }
+
+  .orderLower {
+    grid-template-columns: 1fr;
+  }
+
+  .orderMeta {
+    border-right: 0;
+  }
+
+  .breakup {
+    border-top: 1px solid rgba(255,255,255,.07);
+  }
+
+  .orderActions {
+    justify-content: stretch;
+  }
+
+  .trackButton {
+    width: 100%;
+  }
+
+  .addressTop {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .productGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 44px;
+  }
+
+  .order {
+    padding: 18px;
+  }
+
+  .item {
+    align-items: flex-start;
+  }
+
+  .price {
+    font-size: 11px;
+  }
+
+  .detailBlock {
+    padding: 17px 16px;
+  }
+
+  .breakup {
+    padding: 18px 16px;
+  }
+}
+
+/* Address card action buttons — styling only */
+.address .actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0;
+  flex-wrap: nowrap;
+}
+
+.address .actions .button {
+  min-width: 92px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(213,177,93,.30);
+  background: rgba(213,177,93,.035);
+  color: rgba(245,241,232,.88);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    background .25s ease,
+    border-color .25s ease,
+    color .25s ease,
+    transform .25s ease;
+}
+
+.address .actions .button:hover {
+  background: rgba(213,177,93,.10);
+  border-color: rgba(213,177,93,.65);
+  color: #eeb634;
+  transform: translateY(-1px);
+}
+
+.address .actions .button.danger {
+  border-color: rgba(220,90,90,.25);
+  background: rgba(220,90,90,.025);
+  color: #df9b9b;
+}
+
+.address .actions .button.danger:hover {
+  border-color: rgba(220,90,90,.55);
+  background: rgba(220,90,90,.08);
+  color: #f0b0b0;
+}
+
+@media (max-width: 800px) {
+  .address .actions {
+    width: 100%;
+  }
+
+  .address .actions .button {
+    flex: 1;
+  }
+}

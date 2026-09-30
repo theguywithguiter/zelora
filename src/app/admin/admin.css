@@ -1,0 +1,2313 @@
+/* =========================================================
+   ZELORA ADMIN PANEL
+   Global admin-only design system
+   ========================================================= */
+
+.zelora-admin {
+  --admin-bg: #050505;
+  --admin-bg-soft: #000000;
+  --admin-panel: #0d0d0d;
+  --admin-panel-2: #111111;
+
+  --admin-gold: #d4af55;
+  --admin-gold-light: #e8c878;
+  --admin-gold-dark: #9e7b32;
+
+  --admin-white: #f5f2eb;
+  --admin-text: rgba(245, 242, 235, 0.9);
+  --admin-muted: rgba(245, 242, 235, 0.52);
+  --admin-muted-2: rgba(245, 242, 235, 0.32);
+
+  --admin-border: rgba(255, 255, 255, 0.1);
+  --admin-border-soft: rgba(255, 255, 255, 0.06);
+
+  --admin-radius: 18px;
+  --admin-radius-small: 12px;
+
+  min-height: 100vh;
+  width: 100%;
+  background:
+    radial-gradient(
+      circle at 85% 5%,
+      rgba(212, 175, 85, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 10% 90%,
+      rgba(212, 175, 85, 0.035),
+      transparent 25%
+    ),
+    var(--admin-bg);
+
+  color: var(--admin-text);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  line-height: 1.5;
+
+  position: relative;
+  isolation: isolate;
+}
+
+/* =========================================================
+   RESET — ADMIN ONLY
+   ========================================================= */
+
+.zelora-admin *,
+.zelora-admin *::before,
+.zelora-admin *::after {
+  box-sizing: border-box;
+}
+
+.zelora-admin h1,
+.zelora-admin h2,
+.zelora-admin h3,
+.zelora-admin h4,
+.zelora-admin h5,
+.zelora-admin h6,
+.zelora-admin p {
+  margin-top: 0;
+}
+
+.zelora-admin a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.zelora-admin button,
+.zelora-admin input,
+.zelora-admin textarea,
+.zelora-admin select {
+  font: inherit;
+}
+
+.zelora-admin button {
+  cursor: pointer;
+}
+
+.zelora-admin img {
+  max-width: 100%;
+  display: block;
+}
+
+/* =========================================================
+   PAGE SHELL
+   ========================================================= */
+
+.zelora-admin > main,
+.zelora-admin > div > main {
+  width: min(1500px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 42px 0 80px;
+}
+
+.zelora-admin main {
+  min-height: 100vh;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.zelora-admin header {
+  width: min(1500px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 32px 0 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.zelora-admin header h1 {
+  margin: 0;
+
+  color: var(--admin-white);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 400;
+
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.zelora-admin header p {
+  margin: 10px 0 0;
+
+  color: var(--admin-muted);
+
+  font-size: 13px;
+}
+
+/* =========================================================
+   ADMIN BRAND
+   ========================================================= */
+
+.zelora-admin .admin-brand,
+.zelora-admin .zelora-admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.zelora-admin .admin-brand strong,
+.zelora-admin .zelora-admin-brand strong {
+  color: var(--admin-white);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.zelora-admin .admin-brand span,
+.zelora-admin .zelora-admin-brand span {
+  color: var(--admin-muted-2);
+
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   TOP NAV
+   ========================================================= */
+
+.zelora-admin .admin-nav,
+.zelora-admin .zelora-admin-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 7px;
+
+  border: 1px solid var(--admin-border);
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  backdrop-filter: blur(18px);
+}
+
+.zelora-admin .admin-nav a,
+.zelora-admin .zelora-admin-nav a {
+  padding: 10px 15px;
+
+  border-radius: 999px;
+
+  color: var(--admin-muted);
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  transition:
+    color 250ms ease,
+    background 250ms ease,
+    transform 250ms ease;
+}
+
+.zelora-admin .admin-nav a:hover,
+.zelora-admin .zelora-admin-nav a:hover {
+  color: var(--admin-white);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   REFRESH BUTTON
+   ========================================================= */
+
+.zelora-admin button {
+  border: 1px solid var(--admin-border);
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: var(--admin-text);
+
+  border-radius: 999px;
+
+  padding: 10px 18px;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  transition:
+    background 250ms ease,
+    border-color 250ms ease,
+    color 250ms ease,
+    transform 250ms ease,
+    box-shadow 250ms ease;
+}
+
+.zelora-admin button:hover {
+  border-color: rgba(212, 175, 85, 0.45);
+
+  background: rgba(212, 175, 85, 0.08);
+
+  color: var(--admin-gold-light);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 0 25px rgba(212, 175, 85, 0.06);
+}
+
+.zelora-admin button:active {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   PAGE TITLE
+   ========================================================= */
+
+.zelora-admin .admin-page-header,
+.zelora-admin .zelora-admin-page-header {
+  margin-bottom: 36px;
+}
+
+.zelora-admin .admin-eyebrow,
+.zelora-admin .zelora-admin-eyebrow {
+  margin-bottom: 12px;
+
+  color: var(--admin-gold);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.zelora-admin .admin-page-title,
+.zelora-admin .zelora-admin-page-title {
+  margin: 0;
+
+  color: var(--admin-white);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: clamp(42px, 6vw, 78px);
+
+  font-weight: 400;
+
+  letter-spacing: -0.05em;
+
+  line-height: 0.9;
+}
+
+.zelora-admin .admin-page-description,
+.zelora-admin .zelora-admin-page-description {
+  max-width: 600px;
+
+  margin-top: 18px;
+
+  color: var(--admin-muted);
+
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   STAT GRID
+   ========================================================= */
+
+.zelora-admin .admin-stats,
+.zelora-admin .stats-grid,
+.zelora-admin .zelora-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 28px;
+}
+
+/* Generic grid fallback used by the existing dashboard */
+
+.zelora-admin main > div:first-of-type {
+  max-width: 100%;
+}
+
+/* =========================================================
+   STAT CARD
+   ========================================================= */
+
+.zelora-admin .admin-stat,
+.zelora-admin .stat-card,
+.zelora-admin .zelora-stat-card {
+  position: relative;
+
+  min-height: 160px;
+
+  padding: 24px;
+
+  border: 1px solid var(--admin-border);
+
+  border-radius: var(--admin-radius);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.015)
+    );
+
+  overflow: hidden;
+
+  transition:
+    transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 300ms ease,
+    box-shadow 400ms ease;
+}
+
+.zelora-admin .admin-stat::after,
+.zelora-admin .stat-card::after,
+.zelora-admin .zelora-stat-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 130px;
+  height: 130px;
+
+  right: -65px;
+  top: -65px;
+
+  border-radius: 50%;
+
+  background: rgba(212, 175, 85, 0.08);
+
+  filter: blur(25px);
+
+  pointer-events: none;
+}
+
+.zelora-admin .admin-stat:hover,
+.zelora-admin .stat-card:hover,
+.zelora-admin .zelora-stat-card:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(212, 175, 85, 0.22);
+
+  box-shadow:
+    0 20px 55px rgba(0, 0, 0, 0.35),
+    0 0 30px rgba(212, 175, 85, 0.04);
+}
+
+.zelora-admin .admin-stat-label,
+.zelora-admin .stat-label {
+  color: var(--admin-muted);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.zelora-admin .admin-stat-value,
+.zelora-admin .stat-value {
+  margin-top: 22px;
+
+  color: var(--admin-white);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: 46px;
+  line-height: 1;
+}
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.zelora-admin .admin-card,
+.zelora-admin .card,
+.zelora-admin .panel,
+.zelora-admin section {
+  border: 1px solid var(--admin-border);
+
+  border-radius: var(--admin-radius);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.012)
+    );
+
+  box-shadow:
+    0 20px 70px rgba(0, 0, 0, 0.2);
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.zelora-admin .admin-card-header,
+.zelora-admin .card-header,
+.zelora-admin section > div:first-child {
+  padding: 22px 24px;
+
+  border-bottom: 1px solid var(--admin-border-soft);
+}
+
+.zelora-admin .admin-card-header h2,
+.zelora-admin .card-header h2 {
+  margin: 0;
+
+  color: var(--admin-white);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.zelora-admin .admin-card-header p,
+.zelora-admin .card-header p {
+  margin: 6px 0 0;
+
+  color: var(--admin-muted);
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   LINKS / ACTIONS
+   ========================================================= */
+
+.zelora-admin a {
+  transition:
+    color 250ms ease,
+    border-color 250ms ease,
+    background 250ms ease,
+    transform 250ms ease;
+}
+
+.zelora-admin a:hover {
+  color: var(--admin-gold-light);
+}
+
+/* =========================================================
+   DASHBOARD ACTION CARDS
+   ========================================================= */
+
+.zelora-admin a[class*="rounded-2xl"],
+.zelora-admin a[class*="border"] {
+  transition:
+    transform 350ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 300ms ease,
+    background 300ms ease,
+    box-shadow 350ms ease;
+}
+
+.zelora-admin a[class*="rounded-2xl"]:hover,
+.zelora-admin a[class*="border"]:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(212, 175, 85, 0.25) !important;
+
+  background: rgba(212, 175, 85, 0.045) !important;
+
+  box-shadow:
+    0 20px 55px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================================
+   ORDERS
+   ========================================================= */
+
+.zelora-admin .order-card,
+.zelora-admin .admin-order,
+.zelora-admin .order-item {
+  padding: 24px;
+
+  border-bottom: 1px solid var(--admin-border-soft);
+
+  background: transparent;
+
+  transition:
+    background 250ms ease,
+    border-color 250ms ease;
+}
+
+.zelora-admin .order-card:hover,
+.zelora-admin .admin-order:hover,
+.zelora-admin .order-item:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.zelora-admin .order-card:last-child,
+.zelora-admin .admin-order:last-child,
+.zelora-admin .order-item:last-child {
+  border-bottom: 0;
+}
+
+.zelora-admin .order-number,
+.zelora-admin .admin-order-number {
+  color: var(--admin-white);
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.zelora-admin .order-meta,
+.zelora-admin .admin-order-meta {
+  color: var(--admin-muted);
+
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
+
+.zelora-admin .status,
+.zelora-admin .badge,
+.zelora-admin .status-badge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 28px;
+
+  padding: 0 11px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 999px;
+
+  color: var(--admin-muted);
+
+  background: rgba(255, 255, 255, 0.035);
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+
+  text-transform: uppercase;
+}
+
+/* Pending */
+
+.zelora-admin .status-pending,
+.zelora-admin .badge-pending {
+  color: #dcb969;
+
+  border-color: rgba(220, 185, 105, 0.3);
+
+  background: rgba(220, 185, 105, 0.08);
+}
+
+/* Paid */
+
+.zelora-admin .status-paid,
+.zelora-admin .badge-paid {
+  color: #9ed6a5;
+
+  border-color: rgba(120, 210, 135, 0.25);
+
+  background: rgba(120, 210, 135, 0.07);
+}
+
+/* Processing */
+
+.zelora-admin .status-processing,
+.zelora-admin .badge-processing {
+  color: #9dbde4;
+
+  border-color: rgba(120, 165, 220, 0.25);
+
+  background: rgba(120, 165, 220, 0.07);
+}
+
+/* Shipped */
+
+.zelora-admin .status-shipped,
+.zelora-admin .badge-shipped {
+  color: #bba8e8;
+
+  border-color: rgba(160, 135, 220, 0.25);
+
+  background: rgba(160, 135, 220, 0.07);
+}
+
+/* Delivered */
+
+.zelora-admin .status-delivered,
+.zelora-admin .badge-delivered {
+  color: #91d7bf;
+
+  border-color: rgba(100, 210, 170, 0.25);
+
+  background: rgba(100, 210, 170, 0.07);
+}
+
+/* Cancelled */
+
+.zelora-admin .status-cancelled,
+.zelora-admin .badge-cancelled {
+  color: #dc9191;
+
+  border-color: rgba(220, 100, 100, 0.25);
+
+  background: rgba(220, 100, 100, 0.07);
+}
+
+/* =========================================================
+   FORMS
+   ========================================================= */
+
+.zelora-admin label {
+  display: block;
+
+  color: var(--admin-muted);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.17em;
+
+  text-transform: uppercase;
+}
+
+.zelora-admin input,
+.zelora-admin textarea,
+.zelora-admin select {
+  width: 100%;
+
+  min-height: 46px;
+
+  margin-top: 8px;
+
+  padding: 0 14px;
+
+  border: 1px solid var(--admin-border);
+
+  border-radius: var(--admin-radius-small);
+
+  outline: none;
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  color: var(--admin-white);
+
+  font-size: 12px;
+
+  transition:
+    border-color 250ms ease,
+    background 250ms ease,
+    box-shadow 250ms ease;
+}
+
+.zelora-admin textarea {
+  min-height: 120px;
+  padding: 14px;
+  resize: vertical;
+}
+
+.zelora-admin input::placeholder,
+.zelora-admin textarea::placeholder {
+  color: rgba(245, 242, 235, 0.24);
+}
+
+.zelora-admin input:focus,
+.zelora-admin textarea:focus,
+.zelora-admin select:focus {
+  border-color: rgba(212, 175, 85, 0.55);
+
+  background:
+    rgba(212, 175, 85, 0.035);
+
+  box-shadow:
+    0 0 0 3px rgba(212, 175, 85, 0.06);
+}
+
+.zelora-admin select {
+  appearance: none;
+
+  background-image:
+    linear-gradient(45deg, transparent 50%, #d4af55 50%),
+    linear-gradient(135deg, #d4af55 50%, transparent 50%);
+
+  background-position:
+    calc(100% - 17px) 20px,
+    calc(100% - 12px) 20px;
+
+  background-size:
+    5px 5px,
+    5px 5px;
+
+  background-repeat: no-repeat;
+
+  padding-right: 35px;
+}
+
+/* =========================================================
+   FORM GRID
+   ========================================================= */
+
+.zelora-admin .form-grid,
+.zelora-admin .admin-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+.zelora-admin .form-grid-full,
+.zelora-admin .admin-form-full {
+  grid-column: 1 / -1;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.zelora-admin table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  font-size: 12px;
+}
+
+.zelora-admin thead {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.zelora-admin th {
+  padding: 14px 18px;
+
+  border-bottom: 1px solid var(--admin-border);
+
+  color: var(--admin-muted-2);
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.zelora-admin td {
+  padding: 17px 18px;
+
+  border-bottom: 1px solid var(--admin-border-soft);
+
+  color: var(--admin-text);
+
+  vertical-align: middle;
+}
+
+.zelora-admin tbody tr {
+  transition: background 200ms ease;
+}
+
+.zelora-admin tbody tr:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+/* =========================================================
+   PRICE
+   ========================================================= */
+
+.zelora-admin .price,
+.zelora-admin .amount {
+  color: var(--admin-gold-light);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: 22px;
+}
+
+/* =========================================================
+   GOLD PRIMARY BUTTON
+   ========================================================= */
+
+.zelora-admin .admin-primary,
+.zelora-admin .primary-button,
+.zelora-admin button[class*="bg-white"] {
+  border: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--admin-gold-light),
+      var(--admin-gold)
+    ) !important;
+
+  color: #080706 !important;
+
+  box-shadow:
+    0 12px 35px rgba(212, 175, 85, 0.14);
+}
+
+.zelora-admin .admin-primary:hover,
+.zelora-admin .primary-button:hover,
+.zelora-admin button[class*="bg-white"]:hover {
+  background:
+    linear-gradient(
+      135deg,
+      #f0d58a,
+      var(--admin-gold-light)
+    ) !important;
+
+  color: #050505 !important;
+
+  box-shadow:
+    0 18px 45px rgba(212, 175, 85, 0.22);
+}
+
+/* =========================================================
+   SECONDARY BUTTON
+   ========================================================= */
+
+.zelora-admin .admin-secondary,
+.zelora-admin .secondary-button {
+  border: 1px solid var(--admin-border);
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: var(--admin-text);
+}
+
+/* =========================================================
+   DANGER BUTTON
+   ========================================================= */
+
+.zelora-admin .admin-danger,
+.zelora-admin .danger-button {
+  border-color: rgba(220, 100, 100, 0.28);
+
+  background: rgba(220, 100, 100, 0.06);
+
+  color: #e29b9b;
+}
+
+.zelora-admin .admin-danger:hover,
+.zelora-admin .danger-button:hover {
+  border-color: rgba(220, 100, 100, 0.5);
+
+  background: rgba(220, 100, 100, 0.1);
+
+  color: #f0aaaa;
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.zelora-admin .admin-search,
+.zelora-admin .search-box {
+  position: relative;
+
+  width: min(380px, 100%);
+}
+
+.zelora-admin .admin-search input,
+.zelora-admin .search-box input {
+  margin: 0;
+
+  padding-left: 16px;
+
+  border-radius: 999px;
+}
+
+/* =========================================================
+   PRODUCT GRID
+   ========================================================= */
+
+.zelora-admin .admin-product-grid,
+.zelora-admin .product-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 16px;
+}
+
+.zelora-admin .admin-product-card,
+.zelora-admin .product-card {
+  overflow: hidden;
+
+  border: 1px solid var(--admin-border);
+
+  border-radius: var(--admin-radius);
+
+  background: var(--admin-panel);
+
+  transition:
+    transform 350ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 300ms ease,
+    box-shadow 350ms ease;
+}
+
+.zelora-admin .admin-product-card:hover,
+.zelora-admin .product-card:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(212, 175, 85, 0.25);
+
+  box-shadow:
+    0 20px 55px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================================
+   PRODUCT IMAGE
+   ========================================================= */
+
+.zelora-admin .admin-product-image,
+.zelora-admin .product-card img {
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  object-fit: cover;
+
+  background: #111;
+
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.zelora-admin .admin-product-card:hover img,
+.zelora-admin .product-card:hover img {
+  transform: scale(1.035);
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.zelora-admin .empty-state,
+.zelora-admin .admin-empty {
+  padding: 90px 30px;
+
+  text-align: center;
+}
+
+.zelora-admin .empty-state h2,
+.zelora-admin .admin-empty h2 {
+  margin-bottom: 10px;
+
+  color: var(--admin-white);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: 38px;
+
+  font-weight: 400;
+}
+
+.zelora-admin .empty-state p,
+.zelora-admin .admin-empty p {
+  color: var(--admin-muted);
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.zelora-admin .admin-loading,
+.zelora-admin .loading {
+  min-height: 300px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: var(--admin-muted);
+
+  font-size: 10px;
+
+  letter-spacing: 0.2em;
+
+  text-transform: uppercase;
+}
+
+.zelora-admin .admin-loading::after,
+.zelora-admin .loading::after {
+  content: "";
+
+  width: 18px;
+  height: 18px;
+
+  margin-left: 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  border-top-color: var(--admin-gold);
+
+  border-radius: 50%;
+
+  animation: zeloraAdminSpin 800ms linear infinite;
+}
+
+@keyframes zeloraAdminSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.zelora-admin .admin-modal-backdrop,
+.zelora-admin .modal-backdrop {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(0, 0, 0, 0.78);
+
+  backdrop-filter: blur(14px);
+}
+
+.zelora-admin .admin-modal,
+.zelora-admin .modal {
+  width: min(650px, 100%);
+
+  max-height: calc(100vh - 48px);
+
+  overflow: auto;
+
+  padding: 28px;
+
+  border: 1px solid rgba(212, 175, 85, 0.18);
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #121212,
+      #000000
+    );
+
+  box-shadow:
+    0 40px 120px rgba(0, 0, 0, 0.65),
+    0 0 50px rgba(212, 175, 85, 0.05);
+}
+
+/* =========================================================
+   DIVIDERS
+   ========================================================= */
+
+.zelora-admin hr {
+  border: 0;
+
+  border-top: 1px solid var(--admin-border);
+
+  margin: 24px 0;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.zelora-admin .admin-footer,
+.zelora-admin footer {
+  margin-top: 60px;
+
+  padding: 24px 0;
+
+  border-top: 1px solid var(--admin-border);
+
+  color: var(--admin-muted-2);
+
+  font-size: 9px;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.zelora-admin ::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.zelora-admin ::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+.zelora-admin ::-webkit-scrollbar-thumb {
+  border-radius: 99px;
+
+  background: rgba(212, 175, 85, 0.3);
+}
+
+.zelora-admin ::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 85, 0.55);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .zelora-admin .admin-stats,
+  .zelora-admin .stats-grid,
+  .zelora-admin .zelora-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .zelora-admin .admin-product-grid,
+  .zelora-admin .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .zelora-admin > main,
+  .zelora-admin > div > main,
+  .zelora-admin header {
+    width: min(100% - 40px, 1500px);
+  }
+}
+
+@media (max-width: 760px) {
+  .zelora-admin > main,
+  .zelora-admin > div > main {
+    width: calc(100% - 28px);
+
+    padding-top: 28px;
+  }
+
+  .zelora-admin header {
+    width: calc(100% - 28px);
+
+    padding: 22px 0;
+
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 18px;
+  }
+
+  .zelora-admin header h1 {
+    font-size: 44px;
+  }
+
+  .zelora-admin .admin-nav,
+  .zelora-admin .zelora-admin-nav {
+    width: 100%;
+
+    overflow-x: auto;
+
+    justify-content: flex-start;
+
+    border-radius: 14px;
+  }
+
+  .zelora-admin .admin-nav a,
+  .zelora-admin .zelora-admin-nav a {
+    flex: 0 0 auto;
+  }
+
+  .zelora-admin .admin-stats,
+  .zelora-admin .stats-grid,
+  .zelora-admin .zelora-stats,
+  .zelora-admin .admin-product-grid,
+  .zelora-admin .product-grid,
+  .zelora-admin .form-grid,
+  .zelora-admin .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .zelora-admin .form-grid-full,
+  .zelora-admin .admin-form-full {
+    grid-column: auto;
+  }
+
+  .zelora-admin table {
+    min-width: 700px;
+  }
+
+  .zelora-admin .admin-table-wrapper,
+  .zelora-admin .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .zelora-admin section {
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .zelora-admin > main,
+  .zelora-admin > div > main {
+    width: calc(100% - 20px);
+  }
+
+  .zelora-admin header {
+    width: calc(100% - 20px);
+  }
+
+  .zelora-admin header h1 {
+    font-size: 38px;
+  }
+
+  .zelora-admin .admin-page-title,
+  .zelora-admin .zelora-admin-page-title {
+    font-size: 48px;
+  }
+
+  .zelora-admin .admin-stat,
+  .zelora-admin .stat-card,
+  .zelora-admin .zelora-stat-card {
+    min-height: 135px;
+
+    padding: 20px;
+  }
+
+  .zelora-admin .admin-stat-value,
+  .zelora-admin .stat-value {
+    font-size: 38px;
+  }
+}
+
+/* =========================================================
+   REDUCE MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .zelora-admin *,
+  .zelora-admin *::before,
+  .zelora-admin *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+/* =========================================================
+   ZELORA PRODUCTS — ROW
+   ========================================================= */
+
+.zelora-products-page .zelora-product-row {
+  transition:
+    background 180ms ease,
+    transform 180ms ease !important;
+}
+
+.zelora-products-page .zelora-product-row:hover {
+  background: rgba(255, 255, 255, 0.035) !important;
+}
+/* =========================================================
+   ZELORA ADMIN — MULTI IMAGE + PERSONALIZATION BUILDER
+   ========================================================= */
+
+.zelora-new-product-page .new-product-upload-zone {
+  min-height: 235px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 30px;
+  border: 1px dashed rgba(212, 175, 85, 0.28);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 85, 0.07), transparent 55%),
+    rgba(255,255,255,0.018);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.zelora-new-product-page .new-product-upload-zone:hover,
+.zelora-new-product-page .new-product-upload-zone.is-dragging {
+  border-color: rgba(212, 175, 85, 0.65);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 85, 0.11), transparent 55%),
+    rgba(212,175,85,0.025);
+  transform: translateY(-1px);
+}
+
+.zelora-new-product-page .new-product-upload-zone h3 {
+  margin: 0;
+  color: var(--admin-white);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.zelora-new-product-page .new-product-upload-zone p {
+  margin: 0;
+  color: var(--admin-muted);
+  font-size: 11px;
+}
+
+.zelora-new-product-page .new-product-upload-zone > span {
+  color: var(--admin-muted-2);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.zelora-new-product-page .new-product-upload-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(212,175,85,0.25);
+  border-radius: 50%;
+  background: rgba(212,175,85,0.05);
+  color: var(--admin-gold-light);
+  font-size: 20px;
+}
+
+.zelora-new-product-page .new-product-upload-button {
+  margin-top: 8px;
+  padding: 10px 16px;
+  border: 1px solid rgba(212,175,85,0.35);
+  border-radius: 999px;
+  background: rgba(212,175,85,0.07);
+  color: var(--admin-gold-light);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.zelora-new-product-page .new-product-gallery-editor {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid var(--admin-border-soft);
+  border-radius: 15px;
+  background: rgba(255,255,255,0.018);
+}
+
+.zelora-new-product-page .new-product-gallery-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.zelora-new-product-page .new-product-gallery-editor-head > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.zelora-new-product-page .new-product-gallery-editor-head strong {
+  color: var(--admin-white);
+  font-size: 11px;
+}
+
+.zelora-new-product-page .new-product-gallery-editor-head span {
+  color: var(--admin-muted-2);
+  font-size: 9px;
+}
+
+.zelora-new-product-page .new-product-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.zelora-new-product-page .new-product-gallery-item {
+  overflow: hidden;
+  border: 1px solid var(--admin-border);
+  border-radius: 13px;
+  background: #0a0a0a;
+}
+
+.zelora-new-product-page .new-product-gallery-item.is-main {
+  border-color: rgba(212,175,85,0.42);
+  box-shadow: 0 0 0 1px rgba(212,175,85,0.06);
+}
+
+.zelora-new-product-page .new-product-gallery-image {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #111;
+}
+
+.zelora-new-product-page .new-product-gallery-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.zelora-new-product-page .new-product-main-badge {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  padding: 5px 7px;
+  border: 1px solid rgba(212,175,85,0.35);
+  border-radius: 999px;
+  background: rgba(0,0,0,0.72);
+  color: var(--admin-gold-light);
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.zelora-new-product-page .new-product-gallery-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+}
+
+.zelora-new-product-page .new-product-gallery-meta strong {
+  overflow: hidden;
+  color: var(--admin-text);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zelora-new-product-page .new-product-gallery-meta span {
+  color: var(--admin-muted-2);
+  font-size: 8px;
+}
+
+.zelora-new-product-page .new-product-gallery-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
+  padding: 0 10px 10px;
+}
+
+.zelora-new-product-page .new-product-gallery-actions button {
+  min-height: 30px;
+  padding: 0 7px;
+}
+
+.zelora-new-product-page .new-product-personalization-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px 18px;
+  border: 1px solid var(--admin-border);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.018);
+}
+
+.zelora-new-product-page .new-product-personalization-toggle > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.zelora-new-product-page .new-product-personalization-toggle strong {
+  color: var(--admin-white);
+  font-size: 11px;
+}
+
+.zelora-new-product-page .new-product-personalization-toggle span {
+  color: var(--admin-muted-2);
+  font-size: 9px;
+}
+
+.zelora-new-product-page .new-product-switch {
+  position: relative;
+  width: 50px;
+  height: 28px;
+  min-height: 28px;
+  flex: 0 0 50px;
+  padding: 3px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.07);
+}
+
+.zelora-new-product-page .new-product-switch span {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.55);
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.zelora-new-product-page .new-product-switch.is-on {
+  border-color: rgba(212,175,85,0.55);
+  background: rgba(212,175,85,0.16);
+}
+
+.zelora-new-product-page .new-product-switch.is-on span {
+  transform: translateX(20px);
+  background: var(--admin-gold-light);
+}
+
+.zelora-new-product-page .new-product-personalization-builder {
+  padding: 18px;
+  border: 1px solid var(--admin-border-soft);
+  border-radius: 15px;
+  background: rgba(255,255,255,0.012);
+}
+
+.zelora-new-product-page .new-product-builder-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.zelora-new-product-page .new-product-builder-head > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.zelora-new-product-page .new-product-builder-head strong {
+  color: var(--admin-white);
+  font-size: 11px;
+}
+
+.zelora-new-product-page .new-product-builder-head span {
+  color: var(--admin-muted-2);
+  font-size: 9px;
+}
+
+.zelora-new-product-page .new-product-builder-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.zelora-new-product-page .new-product-builder-item {
+  padding: 16px;
+  border: 1px solid var(--admin-border);
+  border-radius: 13px;
+  background: rgba(255,255,255,0.018);
+}
+
+.zelora-new-product-page .new-product-builder-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.zelora-new-product-page .new-product-builder-item-head > span {
+  color: var(--admin-gold);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.zelora-new-product-page .new-product-builder-item .new-product-fields {
+  padding: 16px 0 0;
+}
+
+.zelora-new-product-page .new-product-builder-empty {
+  padding: 45px 20px;
+  border: 1px dashed var(--admin-border);
+  border-radius: 13px;
+  text-align: center;
+}
+
+.zelora-new-product-page .new-product-builder-empty > span {
+  color: var(--admin-gold);
+  font-size: 25px;
+}
+
+.zelora-new-product-page .new-product-builder-empty strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--admin-white);
+  font-size: 11px;
+}
+
+.zelora-new-product-page .new-product-builder-empty p {
+  margin: 5px 0 14px;
+  color: var(--admin-muted-2);
+  font-size: 9px;
+}
+
+.zelora-new-product-page .new-product-required-toggle {
+  width: 100%;
+  min-height: 48px;
+}
+
+.zelora-new-product-page .new-product-required-toggle.is-on {
+  border-color: rgba(212,175,85,0.45);
+  background: rgba(212,175,85,0.08);
+  color: var(--admin-gold-light);
+}
+
+.zelora-new-product-page .new-product-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.zelora-new-product-page .new-product-option-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.zelora-new-product-page .new-product-option-row button {
+  min-width: 42px;
+}
+
+.zelora-new-product-page .new-product-gallery-editor + small {
+  margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+  .zelora-new-product-page .new-product-gallery-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .zelora-new-product-page .new-product-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .zelora-new-product-page .new-product-gallery-editor-head,
+  .zelora-new-product-page .new-product-builder-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+
+/* =========================================================
+   ZELORA PRODUCTS — EDIT ACTION
+   ========================================================= */
+
+.zelora-products-page .product-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.zelora-products-page .product-edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 76px;
+  height: 38px;
+  padding: 0 16px;
+
+  border: 1px solid rgba(212, 175, 85, 0.32);
+  border-radius: 999px;
+
+  background: rgba(212, 175, 85, 0.055);
+
+  color: #d4af55;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  text-decoration: none;
+
+  transition:
+    color 220ms ease,
+    background 220ms ease,
+    border-color 220ms ease,
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.zelora-products-page .product-edit:hover {
+  color: #080706;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f0d58a,
+      #d4af55
+    );
+
+  border-color: #d4af55;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 24px rgba(212, 175, 85, 0.16);
+}
+
+.zelora-products-page .product-edit:active {
+  transform: translateY(0);
+}
+
+.zelora-products-page .product-edit:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(212, 175, 85, 0.14);
+}
+
+/* =========================================================
+   ZELORA ADMIN — ADD PRODUCT BUTTON
+   ========================================================= */
+
+.zelora-products-page a[href="/admin/products/new"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 150px;
+  height: 46px;
+  padding: 0 22px;
+
+  margin-top: 18px;
+
+  border: 1px solid rgba(212, 175, 85, 0.55);
+  border-radius: 999px;
+
+  background: linear-gradient(
+    135deg,
+    #d4af55,
+    #e8c878
+  );
+
+  color: #080706;
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  text-decoration: none;
+
+  box-shadow:
+    0 8px 30px rgba(212, 175, 85, 0.12);
+
+  transition:
+    transform 220ms ease,
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    color 220ms ease;
+}
+
+.zelora-products-page a[href="/admin/products/new"]:hover {
+  background: linear-gradient(
+    135deg,
+    #e8c878,
+    #f0d58a
+  );
+
+  border-color: #e8c878;
+
+  color: #050403;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 34px rgba(212, 175, 85, 0.22);
+}
+
+.zelora-products-page a[href="/admin/products/new"]:active {
+  transform: translateY(0);
+  box-shadow:
+    0 6px 18px rgba(212, 175, 85, 0.12);
+}
+
+.zelora-products-page a[href="/admin/products/new"]:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(212, 175, 85, 0.16),
+    0 10px 30px rgba(212, 175, 85, 0.18);
+}
+
+
+/* =========================================================
+   ZELORA DASHBOARD — FINAL ALIGNMENT FIX
+   All dashboard elements share the exact same left/right edge.
+   ========================================================= */
+
+.zelora-admin main.admin {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 70px 32px !important;
+}
+
+/* Remove the second layout system created by the dashboard */
+.zelora-admin main.admin > .container {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Header must use the exact same content width as stats/orders */
+.zelora-admin main.admin > .container > .header {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 0 45px !important;
+  padding: 0 0 28px !important;
+  border-bottom: 1px solid var(--admin-border) !important;
+}
+
+/* Stats */
+.zelora-admin main.admin .stats {
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Recent orders */
+.zelora-admin main.admin .orders {
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Keep everything aligned on smaller screens */
+@media (max-width: 760px) {
+  .zelora-admin main.admin {
+    padding: 40px 18px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .zelora-admin main.admin {
+    padding: 40px 10px !important;
+  }
+}
+
+.sku-text span,
+.sku-text strong {
+  color: #f2c94c;
+}
+
+
+/* =========================================================
+   ZELORA — NEW PRODUCT PAGE UI
+   ========================================================= */
+
+.zelora-new-product-page {
+  --new-card-gap: 18px;
+}
+
+.zelora-new-product-page .new-product-shell {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.zelora-new-product-page .new-product-header {
+  margin-bottom: 30px;
+}
+
+.zelora-new-product-page .new-product-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  color: var(--admin-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.zelora-new-product-page .new-product-back:hover {
+  color: var(--admin-gold-light);
+  transform: translateX(-2px);
+}
+
+.zelora-new-product-page .new-product-header .admin-page-title {
+  font-size: clamp(48px, 7vw, 76px);
+}
+
+.zelora-new-product-page .new-product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.zelora-new-product-page .new-product-card {
+  overflow: hidden;
+}
+
+.zelora-new-product-page .new-product-card-header {
+  display: block;
+  padding: 30px 32px 26px !important;
+  border-bottom: 1px solid var(--admin-border-soft);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(212, 175, 85, 0.065), transparent 34%);
+}
+
+.zelora-new-product-page .new-product-card-header > div {
+  display: block;
+}
+
+.zelora-new-product-page .new-product-section-number {
+  margin: 0 0 9px;
+  color: var(--admin-gold);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+}
+
+.zelora-new-product-page .new-product-card-header h2 {
+  margin: 0;
+  color: var(--admin-white);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(30px, 3vw, 40px);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.zelora-new-product-page .new-product-card-header p:last-child {
+  max-width: 680px;
+  margin: 12px 0 0;
+  color: var(--admin-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.zelora-new-product-page .new-product-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--new-card-gap);
+  padding: 28px 32px 32px;
+}
+
+.zelora-new-product-page .new-product-fields-two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.zelora-new-product-page .new-product-field {
+  min-width: 0;
+}
+
+.zelora-new-product-page .new-product-field-full {
+  grid-column: 1 / -1;
+}
+
+.zelora-new-product-page .new-product-field label span {
+  color: var(--admin-gold-light);
+}
+
+.zelora-new-product-page .new-product-field small {
+  display: block;
+  margin-top: 8px;
+  color: var(--admin-muted-2);
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.zelora-new-product-page .new-product-field textarea {
+  min-height: 155px;
+  line-height: 1.65;
+}
+
+.zelora-new-product-page .new-product-input-prefix,
+.zelora-new-product-page .new-product-price-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.zelora-new-product-page .new-product-input-prefix > span,
+.zelora-new-product-page .new-product-price-input > span {
+  position: absolute;
+  z-index: 1;
+  left: 15px;
+  color: var(--admin-gold);
+  font-size: 12px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.zelora-new-product-page .new-product-input-prefix input {
+  padding-left: 30px;
+}
+
+.zelora-new-product-page .new-product-price-input input {
+  padding-left: 34px;
+  -moz-appearance: textfield;
+}
+
+.zelora-new-product-page .new-product-price-input input::-webkit-outer-spin-button,
+.zelora-new-product-page .new-product-price-input input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.zelora-new-product-page .new-product-upload-zone {
+  width: 100%;
+  min-height: 250px;
+  margin: 0;
+  padding: 34px 28px;
+}
+
+.zelora-new-product-page .new-product-image-error {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(220, 100, 100, 0.22);
+  border-radius: 10px;
+  background: rgba(220, 100, 100, 0.06);
+  color: #e29b9b;
+  font-size: 10px;
+}
+
+.zelora-new-product-page .new-product-gallery-editor {
+  margin-top: 18px;
+}
+
+.zelora-new-product-page .new-product-gallery-actions button {
+  width: 100%;
+  min-height: 32px;
+  padding: 0 8px;
+  font-size: 8px;
+}
+
+.zelora-new-product-page .new-product-gallery-editor + small {
+  display: block;
+  margin-top: 10px;
+  color: var(--admin-muted-2);
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.zelora-new-product-page .new-product-personalization-toggle {
+  width: 100%;
+}
+
+.zelora-new-product-page .new-product-personalization-builder {
+  margin-top: 16px;
+}
+
+.zelora-new-product-page .new-product-builder-item .new-product-fields {
+  padding: 0;
+}
+
+.zelora-new-product-page .new-product-builder-item .new-product-fields-two {
+  padding-top: 16px;
+}
+
+.zelora-new-product-page .new-product-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 4px 0 20px;
+}
+
+.zelora-new-product-page .new-product-actions .new-product-cancel,
+.zelora-new-product-page .new-product-actions .new-product-submit {
+  min-height: 46px;
+  padding: 0 20px;
+}
+
+.zelora-new-product-page .new-product-cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zelora-new-product-page .new-product-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 175px;
+}
+
+.zelora-new-product-page .new-product-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+  transform: none;
+}
+
+.zelora-new-product-page .new-product-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 18px;
+  padding: 15px 17px;
+  border: 1px solid rgba(220, 100, 100, 0.22);
+  border-radius: 14px;
+  background: rgba(220, 100, 100, 0.055);
+}
+
+.zelora-new-product-page .new-product-error-icon {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(220, 100, 100, 0.35);
+  border-radius: 50%;
+  color: #e7a2a2;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.zelora-new-product-page .new-product-error-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.zelora-new-product-page .new-product-error-content strong {
+  color: #f0c0c0;
+  font-size: 11px;
+}
+
+.zelora-new-product-page .new-product-error-content span {
+  color: rgba(245, 242, 235, 0.62);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+  .zelora-new-product-page .new-product-header {
+    margin-bottom: 24px;
+  }
+
+  .zelora-new-product-page .new-product-header .admin-page-title {
+    font-size: 52px;
+  }
+
+  .zelora-new-product-page .new-product-card-header {
+    padding: 24px 22px 21px !important;
+  }
+
+  .zelora-new-product-page .new-product-fields,
+  .zelora-new-product-page .new-product-fields-two {
+    grid-template-columns: 1fr;
+    padding: 22px;
+    gap: 16px;
+  }
+
+  .zelora-new-product-page .new-product-upload-zone {
+    min-height: 220px;
+    padding: 26px 18px;
+  }
+
+  .zelora-new-product-page .new-product-actions {
+    justify-content: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .zelora-new-product-page .new-product-actions > * {
+    width: 100%;
+  }
+
+  .zelora-new-product-page .new-product-submit {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .zelora-new-product-page .new-product-header .admin-page-title {
+    font-size: 46px;
+  }
+
+  .zelora-new-product-page .new-product-card-header {
+    padding: 22px 18px 19px !important;
+  }
+
+  .zelora-new-product-page .new-product-fields {
+    padding: 18px;
+  }
+
+  .zelora-new-product-page .new-product-card-header h2 {
+    font-size: 32px;
+  }
+
+  .zelora-new-product-page .new-product-upload-zone {
+    min-height: 205px;
+  }
+}
+
+/* =========================================================
+   ZELORA ORDERS — PERSONALIZATION BOX SEPARATION
+   Keep the PERSONALIZATION section separate from its
+   individual personalization cards.
+   ========================================================= */
+
+.zelora-admin .zelora-personalization-section {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}

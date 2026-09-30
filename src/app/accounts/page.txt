@@ -1,0 +1,919 @@
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { getSession } from "@/lib/auth";
+
+export default async function AccountsPage() {
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/account/login");
+  }
+
+  const firstName = session.name.split(" ")[0] || "there";
+
+  return (
+    <main className="accounts-page">
+      <div className="accounts-glow accounts-glow-one" aria-hidden="true" />
+      <div className="accounts-glow accounts-glow-two" aria-hidden="true" />
+
+      <div className="accounts-shell">
+        <header className="accounts-nav">
+          <Link href="/" className="accounts-brand" aria-label="ZELORA home">
+            ZELORA
+          </Link>
+
+          <div className="accounts-nav-actions">
+            <Link href="/#" className="accounts-nav-link">
+              HOME
+            </Link>
+
+            <form action="/api/auth/logout" method="post">
+              <button type="submit" className="accounts-signout">
+                SIGN OUT
+              </button>
+            </form>
+          </div>
+        </header>
+
+        <section className="accounts-hero">
+          <div className="accounts-eyebrow">YOUR PRIVATE SPACE</div>
+
+          <h1>
+            Welcome back,
+            <br />
+            <em>{firstName}.</em>
+          </h1>
+
+          <p>
+            Everything you love from ZELORA, kept together in one place.
+          </p>
+        </section>
+
+        <section className="accounts-overview" aria-label="Account overview">
+          <article className="accounts-card accounts-card-profile">
+            <div className="accounts-card-top">
+              <span className="accounts-card-label">PROFILE</span>
+              <span className="accounts-card-symbol">◌</span>
+            </div>
+
+            <div className="accounts-avatar">
+              {firstName.charAt(0).toUpperCase()}
+            </div>
+
+            <h2>{session.name}</h2>
+            <p>{session.email}</p>
+
+            <Link href="/accounts/profile" className="accounts-card-action">
+              VIEW PROFILE <span>→</span>
+            </Link>
+          </article>
+
+          <article className="accounts-card accounts-card-wide">
+            <div className="accounts-card-top">
+              <span className="accounts-card-label">MY ORDERS</span>
+              <span className="accounts-card-symbol">◷</span>
+            </div>
+
+            <div className="accounts-feature-content">
+              <div>
+                <span className="accounts-mini-label">YOUR PURCHASES</span>
+                <h2>Track every piece.</h2>
+                <p>
+                  Follow your ZELORA orders from confirmation to delivery.
+                </p>
+              </div>
+
+              <Link href="/accounts/orders" className="accounts-outline-button">
+                MY ORDERS <span>→</span>
+              </Link>
+            </div>
+          </article>
+
+          <article className="accounts-card accounts-card-small">
+            <div className="accounts-card-top">
+              <span className="accounts-card-label">MY WISHLIST</span>
+              <span className="accounts-card-symbol">♡</span>
+            </div>
+
+            <h2>Saved pieces.</h2>
+            <p>
+              Your favourites will live here when you start saving pieces.
+            </p>
+
+            <Link href="/wishlist" className="accounts-text-link">
+              DISCOVER PIECES <span>→</span>
+            </Link>
+          </article>
+
+          <article className="accounts-card accounts-card-small">
+            <div className="accounts-card-top">
+              <span className="accounts-card-label">SAVED ADDRESSES</span>
+              <span className="accounts-card-symbol">⌖</span>
+            </div>
+
+            <h2>Delivery details.</h2>
+            <p>
+              Save your preferred shipping addresses for faster checkout.
+            </p>
+
+            <Link href="/accounts/addresses" className="accounts-text-link">
+              MANAGE ADDRESSES <span>→</span>
+            </Link>
+          </article>
+        </section>
+
+        <section className="accounts-bottom">
+          <div>
+            <span>READY WHEN YOU ARE</span>
+            <h2>Find your next piece.</h2>
+          </div>
+
+          <Link href="/shop" className="accounts-shop-button">
+            EXPLORE ZELORA <span>→</span>
+          </Link>
+        </section>
+
+        <Link href="/" className="accounts-mobile-home-button">
+          BACK TO HOME <span></span>
+        </Link>
+
+        <footer className="accounts-footer">
+          <Link href="/">ZELORA</Link>
+          <span>© {new Date().getFullYear()} ZELORA</span>
+        </footer>
+      </div>
+
+      <style>{`
+        .accounts-page {
+          min-height: 100svh;
+          position: relative;
+          overflow: hidden;
+          background:
+            radial-gradient(
+              circle at 50% 0%,
+              rgba(214, 171, 70, 0.09),
+              transparent 28%
+            ),
+            #060606;
+          color: #f5f0e7;
+          isolation: isolate;
+        }
+
+        .accounts-glow {
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+          z-index: -1;
+          filter: blur(2px);
+        }
+
+        .accounts-glow-one {
+          width: 620px;
+          height: 620px;
+          top: -390px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: radial-gradient(
+            circle,
+            rgba(220, 180, 81, 0.08),
+            transparent 68%
+          );
+        }
+
+        .accounts-glow-two {
+          width: 460px;
+          height: 460px;
+          right: -300px;
+          top: 48%;
+          background: radial-gradient(
+            circle,
+            rgba(220, 180, 81, 0.035),
+            transparent 70%
+          );
+        }
+
+        .accounts-shell {
+          width: min(calc(100% - 44px), 1180px);
+          margin: 0 auto;
+          padding: 32px 0 52px;
+        }
+
+        .accounts-nav {
+          height: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .accounts-brand {
+          color: #f5f0e7;
+          text-decoration: none;
+          font-size: 13px;
+          font-weight: 600;
+          letter-spacing: 0.38em;
+          transition: color 180ms ease;
+        }
+
+        .accounts-brand:hover {
+          color: #dcb451;
+        }
+
+        .accounts-nav-actions {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          gap: 28px;
+          height: 44px;
+          margin: 0;
+          padding: 0;
+        }
+
+        .accounts-nav-actions form {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 44px;
+          margin: 0;
+          padding: 0;
+        }
+
+        .accounts-nav-link,
+        .accounts-signout {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          height: 44px;
+          padding: 0;
+          margin: 0;
+          color: rgba(255, 255, 255, 0.48);
+          background: transparent;
+          border: 0;
+          text-decoration: none;
+          cursor: pointer;
+          font: inherit;
+          font-size: 8px;
+          font-weight: 600;
+          letter-spacing: 0.18em;
+          line-height: 44px;
+          vertical-align: middle;
+          transition: color 180ms ease;
+        }
+
+        .accounts-nav-link:hover,
+        .accounts-signout:hover {
+          color: #dcb451;
+        }
+
+        .accounts-hero {
+          padding: 108px 0 66px;
+        }
+
+        .accounts-eyebrow {
+          color: #cfa84c;
+          font-size: 9px;
+          font-weight: 600;
+          letter-spacing: 0.28em;
+        }
+
+        .accounts-hero h1 {
+          margin: 18px 0 17px;
+          font-family: Georgia, "Times New Roman", serif;
+          font-size: clamp(58px, 8vw, 94px);
+          line-height: 0.92;
+          font-weight: 400;
+          letter-spacing: -0.05em;
+        }
+
+        .accounts-hero h1 em {
+          color: #dcb451;
+          font-style: normal;
+        }
+
+        .accounts-hero p {
+          max-width: 480px;
+          margin: 0;
+          color: rgba(255, 255, 255, 0.39);
+          font-size: 13px;
+          line-height: 1.8;
+        }
+
+        .accounts-overview {
+          display: grid;
+          grid-template-columns: repeat(12, minmax(0, 1fr));
+          gap: 14px;
+        }
+
+        .accounts-card {
+          position: relative;
+          min-width: 0;
+          box-sizing: border-box;
+          border: 1px solid rgba(213, 169, 72, 0.14);
+          border-radius: 26px;
+          background:
+            linear-gradient(
+              145deg,
+              rgba(255, 255, 255, 0.047),
+              rgba(255, 255, 255, 0.013)
+            );
+          box-shadow:
+            inset 0 1px rgba(255, 255, 255, 0.025),
+            0 22px 70px rgba(0, 0, 0, 0.18);
+          padding: 28px;
+          overflow: hidden;
+          transition:
+            border-color 220ms ease,
+            transform 220ms ease,
+            background 220ms ease;
+        }
+
+        .accounts-card::after {
+          content: "";
+          position: absolute;
+          width: 170px;
+          height: 170px;
+          right: -90px;
+          bottom: -100px;
+          border-radius: 50%;
+          background: radial-gradient(
+            circle,
+            rgba(220, 180, 81, 0.07),
+            transparent 68%
+          );
+          pointer-events: none;
+        }
+
+        .accounts-card:hover {
+          border-color: rgba(220, 180, 81, 0.29);
+          transform: translateY(-2px);
+          background:
+            linear-gradient(
+              145deg,
+              rgba(255, 255, 255, 0.055),
+              rgba(255, 255, 255, 0.016)
+            );
+        }
+
+        .accounts-card-profile {
+          grid-column: span 4;
+          min-height: 360px;
+        }
+
+        .accounts-card-wide {
+          grid-column: span 8;
+          min-height: 360px;
+        }
+
+        .accounts-card-small {
+          grid-column: span 6;
+          min-height: 280px;
+        }
+
+        .accounts-card-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .accounts-card-label,
+        .accounts-mini-label {
+          color: rgba(255, 255, 255, 0.32);
+          font-size: 8px;
+          font-weight: 600;
+          letter-spacing: 0.2em;
+        }
+
+        .accounts-card-symbol {
+          color: rgba(220, 180, 81, 0.7);
+          font-size: 17px;
+          line-height: 1;
+        }
+
+        .accounts-avatar {
+          width: 64px;
+          height: 64px;
+          margin-top: 54px;
+          display: grid;
+          place-items: center;
+          border: 1px solid rgba(220, 180, 81, 0.35);
+          border-radius: 50%;
+          background:
+            radial-gradient(
+              circle at 35% 25%,
+              rgba(220, 180, 81, 0.16),
+              transparent 65%
+            ),
+            rgba(255, 255, 255, 0.025);
+          color: #dcb451;
+          font-family: Georgia, "Times New Roman", serif;
+          font-size: 25px;
+        }
+
+        .accounts-card h2 {
+          margin: 18px 0 8px;
+          font-family: Georgia, "Times New Roman", serif;
+          font-weight: 400;
+          font-size: 30px;
+          line-height: 1.02;
+          letter-spacing: -0.025em;
+        }
+
+        .accounts-card p {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.34);
+          font-size: 11px;
+          line-height: 1.7;
+        }
+
+        .accounts-card-profile > p {
+          word-break: break-word;
+        }
+
+        .accounts-card-action,
+        .accounts-text-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          color: #dcb451;
+          text-decoration: none;
+          font-size: 8px;
+          font-weight: 600;
+          letter-spacing: 0.18em;
+          transition: color 180ms ease;
+        }
+
+        .accounts-card-action {
+          position: absolute;
+          left: 28px;
+          bottom: 29px;
+        }
+
+        .accounts-card-action span,
+        .accounts-text-link span,
+        .accounts-outline-button span,
+        .accounts-shop-button span {
+          font-size: 15px;
+          font-weight: 400;
+          transition: transform 180ms ease;
+        }
+
+        .accounts-card-action:hover,
+        .accounts-text-link:hover {
+          color: #f1d079;
+        }
+
+        .accounts-card-action:hover span,
+        .accounts-text-link:hover span,
+        .accounts-outline-button:hover span,
+        .accounts-shop-button:hover span {
+          transform: translateX(4px);
+        }
+
+        .accounts-feature-content {
+          min-height: 260px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-end;
+        }
+
+        .accounts-feature-content h2 {
+          margin-top: 12px;
+          font-size: clamp(37px, 4vw, 54px);
+        }
+
+        .accounts-feature-content p {
+          max-width: 410px;
+        }
+
+        .accounts-outline-button {
+          margin-top: 28px;
+          min-height: 44px;
+          padding: 0 19px;
+          display: inline-flex;
+          align-items: center;
+          gap: 13px;
+          border: 1px solid rgba(220, 180, 81, 0.36);
+          border-radius: 999px;
+          color: #dcb451;
+          background: rgba(220, 180, 81, 0.025);
+          text-decoration: none;
+          font-size: 8px;
+          font-weight: 600;
+          letter-spacing: 0.16em;
+          transition:
+            background 180ms ease,
+            border-color 180ms ease,
+            color 180ms ease;
+        }
+
+        .accounts-outline-button:hover {
+          background: #dcb451;
+          border-color: #dcb451;
+          color: #000000;
+        }
+
+        .accounts-card-small {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .accounts-card-small h2 {
+          margin-top: auto;
+        }
+
+        .accounts-card-small .accounts-text-link {
+          margin-top: 28px;
+        }
+
+        .accounts-bottom {
+          margin-top: 14px;
+          min-height: 210px;
+          padding: 35px 38px;
+          box-sizing: border-box;
+          border-radius: 26px;
+          border: 1px solid rgba(213, 169, 72, 0.14);
+          background:
+            radial-gradient(
+              circle at 75% 50%,
+              rgba(220, 180, 81, 0.07),
+              transparent 35%
+            ),
+            rgba(255, 255, 255, 0.018);
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 30px;
+        }
+
+        .accounts-bottom > div > span {
+          color: #cfa84c;
+          font-size: 8px;
+          font-weight: 600;
+          letter-spacing: 0.22em;
+        }
+
+        .accounts-bottom h2 {
+          margin: 12px 0 0;
+          font-family: Georgia, "Times New Roman", serif;
+          font-size: clamp(32px, 4vw, 50px);
+          font-weight: 400;
+          letter-spacing: -0.035em;
+        }
+
+        .accounts-shop-button {
+          min-height: 52px;
+          padding: 0 24px;
+          display: inline-flex;
+          align-items: center;
+          gap: 14px;
+          flex: 0 0 auto;
+          border: 1px solid #dcb451;
+          border-radius: 999px;
+          background: #dcb451;
+          color: #000000;
+          text-decoration: none;
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          transition:
+            transform 200ms ease,
+            background 200ms ease,
+            box-shadow 200ms ease;
+        }
+
+        .accounts-shop-button:hover {
+          background: #f1d079;
+          transform: translateY(-2px);
+          box-shadow: 0 12px 35px rgba(220, 180, 81, 0.14);
+        }
+
+        .accounts-mobile-home-button {
+          display: none;
+        }
+
+        .accounts-footer {
+          padding-top: 46px;
+          display: flex;
+          justify-content: space-between;
+          color: rgba(255, 255, 255, 0.2);
+          font-size: 7px;
+          letter-spacing: 0.18em;
+        }
+
+        .accounts-footer a {
+          color: rgba(255, 255, 255, 0.27);
+          text-decoration: none;
+        }
+
+        .accounts-footer a:hover {
+          color: #dcb451;
+        }
+
+        @media (max-width: 850px) {
+          .accounts-card-profile,
+          .accounts-card-wide {
+            grid-column: span 6;
+          }
+
+          .accounts-card-small {
+            grid-column: span 6;
+          }
+
+          .accounts-card-profile {
+            min-height: 330px;
+          }
+
+          .accounts-card-wide {
+            min-height: 330px;
+          }
+        }
+
+        @media (max-width: 620px) {
+          .accounts-page {
+            overflow-x: hidden;
+          }
+
+          .accounts-shell {
+            width: min(calc(100% - 24px), 600px);
+            padding-top: 20px;
+            padding-bottom: 32px;
+          }
+
+          .accounts-nav {
+            height: 40px;
+          }
+
+          .accounts-brand {
+            font-size: 11px;
+            letter-spacing: 0.34em;
+          }
+
+          .accounts-nav-link {
+            display: none;
+          }
+
+          .accounts-nav-actions {
+            gap: 0;
+          }
+
+          .accounts-signout {
+            font-size: 7px;
+          }
+
+          .accounts-hero {
+            padding: 62px 0 34px;
+          }
+
+          .accounts-eyebrow {
+            font-size: 8px;
+            letter-spacing: 0.24em;
+          }
+
+          .accounts-hero h1 {
+            margin: 14px 0 13px;
+            font-size: clamp(46px, 14vw, 61px);
+            line-height: 0.94;
+            letter-spacing: -0.055em;
+          }
+
+          .accounts-hero p {
+            max-width: 310px;
+            font-size: 10px;
+            line-height: 1.65;
+          }
+
+          .accounts-overview {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+          }
+
+          .accounts-card-profile,
+          .accounts-card-wide,
+          .accounts-card-small {
+            grid-column: auto;
+            min-height: 0 !important;
+          }
+
+          /*
+           * Mobile becomes a compact account menu:
+           * PROFILE
+           * MY ORDERS
+           * MY WISHLIST
+           * SAVED ADDRESSES
+           */
+          .accounts-card {
+            min-height: 0 !important;
+            height: 82px;
+            padding: 0 18px;
+            border-radius: 20px;
+            display: grid;
+            grid-template-columns: 34px minmax(0, 1fr) 28px;
+            align-items: center;
+            column-gap: 15px;
+            background:
+              linear-gradient(
+                110deg,
+                rgba(255, 255, 255, 0.045),
+                rgba(255, 255, 255, 0.012)
+              );
+            box-shadow:
+              inset 0 1px rgba(255, 255, 255, 0.025),
+              0 12px 38px rgba(0, 0, 0, 0.16);
+          }
+
+          .accounts-card::after {
+            width: 130px;
+            height: 130px;
+            right: -75px;
+            bottom: -80px;
+            opacity: 0.7;
+          }
+
+          .accounts-card:hover {
+            transform: none;
+          }
+
+          /* Keep every mobile account row on one exact horizontal axis. */
+          .accounts-card-top {
+            display: contents;
+          }
+
+          .accounts-card-label {
+            grid-column: 2;
+            grid-row: 1;
+            min-width: 0;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.17em;
+            line-height: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .accounts-card-symbol {
+            grid-column: 1;
+            grid-row: 1;
+            width: 34px;
+            height: 34px;
+            margin: 0;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(220, 180, 81, 0.25);
+            border-radius: 50%;
+            background: rgba(220, 180, 81, 0.035);
+            color: rgba(220, 180, 81, 0.85);
+            font-size: 14px;
+            line-height: 1;
+          }
+
+          .accounts-card-profile .accounts-avatar {
+            grid-column: 1;
+            grid-row: 1;
+            width: 34px;
+            height: 34px;
+            margin: 0;
+            font-size: 15px;
+            z-index: 1;
+          }
+
+          .accounts-card-profile .accounts-card-top .accounts-card-symbol {
+            display: none;
+          }
+
+          .accounts-card-profile h2,
+          .accounts-card-profile > p {
+            display: none;
+          }
+
+          .accounts-card-profile::before {
+            display: none;
+          }
+
+          .accounts-card-action,
+          .accounts-text-link,
+          .accounts-outline-button {
+            grid-column: 3;
+            grid-row: 1;
+            position: static;
+            justify-self: end;
+            margin: 0;
+            min-height: 0;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: rgba(220, 180, 81, 0.92);
+            font-size: 0;
+            gap: 0;
+            width: 28px;
+            height: 28px;
+            display: grid;
+            place-items: center;
+          }
+
+          .accounts-card-action::after,
+          .accounts-text-link::after,
+          .accounts-outline-button::after {
+            content: "→";
+            font-size: 18px;
+            font-weight: 400;
+          }
+
+          .accounts-card-action span,
+          .accounts-text-link span,
+          .accounts-outline-button span {
+            display: none;
+          }
+
+          .accounts-feature-content {
+            min-height: 0;
+            display: contents;
+          }
+
+          .accounts-feature-content > div {
+            display: contents;
+          }
+
+          .accounts-mini-label,
+          .accounts-feature-content h2,
+          .accounts-feature-content p {
+            display: none;
+          }
+
+          .accounts-card-small h2,
+          .accounts-card-small p {
+            display: none;
+          }
+
+          .accounts-bottom {
+            display: none;
+          }
+
+          .accounts-mobile-home-button {
+            margin-top: 24px;
+            width: 100%;
+            height: 50px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border: 1px solid rgba(220, 180, 81, 0.38);
+            border-radius: 999px;
+            background: rgba(220, 180, 81, 0.035);
+            color: #dcb451;
+            text-decoration: none;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            transition:
+              background 180ms ease,
+              border-color 180ms ease,
+              color 180ms ease;
+          }
+
+          .accounts-mobile-home-button span {
+            font-size: 17px;
+            line-height: 1;
+            transition: transform 180ms ease;
+          }
+
+          .accounts-mobile-home-button:active {
+            background: rgba(220, 180, 81, 0.1);
+            border-color: rgba(220, 180, 81, 0.65);
+          }
+
+          .accounts-mobile-home-button:hover {
+            background: rgba(220, 180, 81, 0.08);
+            border-color: rgba(220, 180, 81, 0.65);
+            color: #f1d079;
+          }
+
+          .accounts-mobile-home-button:hover span {
+            transform: translateX(-3px);
+          }
+
+          .accounts-footer {
+            padding: 30px 2px 0;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .accounts-card,
+          .accounts-actions,
+          .accounts-card-action,
+          .accounts-text-link,
+          .accounts-outline-button,
+          .accounts-shop-button,
+          .accounts-brand,
+          .accounts-nav-link,
+          .accounts-signout {
+            transition: none;
+          }
+        }
+      `}</style>
+    </main>
+  );
+}

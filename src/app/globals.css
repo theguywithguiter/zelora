@@ -1,0 +1,2496 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --black: #000000;
+  --charcoal: #111111;
+  --graphite: #1a1a1a;
+  --white: #ffffff;
+  --soft-white: #f5f5f5;
+  --muted: #b3b3b3;
+  --gold: #FFD700;
+--light-gold: #FFE87A;
+--deep-gold: #C99700;
+  --border: #2a2a2a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--black);
+  color: var(--white);
+  font-family: "Manrope", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+::selection {
+  background: var(--gold);
+  color: #000;
+}
+
+/* ========================================================= */
+/* PAGE */
+/* ========================================================= */
+
+.zelora-page {
+  min-height: 100vh;
+  background: #000000;
+  overflow-x: hidden;
+}
+
+/* ========================================================= */
+/* NAVIGATION */
+/* ========================================================= */
+
+.zelora-nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  height: 82px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition:
+    background 500ms ease,
+    border-color 500ms ease,
+    backdrop-filter 500ms ease;
+}
+
+.zelora-nav-scrolled {
+  background: #000000 !important;
+  backdrop-filter: blur(24px);
+  border-color: rgba(212,175,55,0.16);
+}
+
+.zelora-nav-inner {
+  width: min(1400px, calc(100% - 80px));
+  height: 100%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.zelora-logo,
+.zelora-footer-logo {
+  font-family: "Manrope", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.38em;
+}
+
+.zelora-logo {
+  transition: color 300ms ease;
+}
+
+.zelora-logo:hover {
+  color: var(--light-gold);
+}
+
+.zelora-desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  margin-left: 100px;
+}
+
+.zelora-desktop-nav a {
+  position: relative;
+  color: rgba(255,255,255,0.58);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 300ms ease;
+}
+
+.zelora-desktop-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -7px;
+  height: 1px;
+  background: var(--gold);
+  transition: right 350ms ease;
+}
+
+.zelora-desktop-nav a:hover {
+  color: white;
+}
+
+.zelora-desktop-nav a:hover::after {
+  right: 0;
+}
+
+.zelora-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.zelora-icon-button,
+.zelora-cart {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.025);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    border-color 300ms ease,
+    background 300ms ease,
+    color 300ms ease,
+    transform 300ms ease;
+}
+
+.zelora-icon-button:hover,
+.zelora-cart:hover {
+  border-color: rgba(212,175,55,0.55);
+  background: rgba(212,175,55,0.08);
+  color: var(--light-gold);
+  transform: translateY(-2px);
+}
+
+.zelora-icon-button svg,
+.zelora-cart svg {
+  width: 17px;
+  height: 17px;
+}
+
+.zelora-cart {
+  position: relative;
+  margin-left: 4px;
+}
+
+.zelora-cart span {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: black;
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========================================================= */
+/* HERO */
+/* ========================================================= */
+
+.zelora-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse at 68% 45%,
+      rgba(212,175,55,0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      ellipse at 35% 50%,
+      rgba(255,255,255,0.035),
+      transparent 35%
+    ),
+    #000;
+}
+
+.zelora-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,0.9),
+      rgba(0,0,0,0.5),
+      rgba(0,0,0,0.85)
+    );
+}
+
+.zelora-hero::after {
+  content: "";
+  position: absolute;
+  right: -10%;
+  top: 8%;
+  width: 650px;
+  height: 650px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,175,55,0.09);
+  box-shadow:
+    0 0 100px rgba(212,175,55,0.05),
+    inset 0 0 100px rgba(212,175,55,0.025);
+  animation: heroOrb 14s ease-in-out infinite;
+}
+
+.zelora-hero-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+}
+
+.zelora-hero-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  right: 10%;
+  top: 20%;
+  border-radius: 50%;
+  background: rgba(212,175,55,0.035);
+  filter: blur(100px);
+  animation: goldPulse 8s ease-in-out infinite;
+}
+
+.zelora-hero-content {
+  position: relative;
+  z-index: 2;
+  width: min(1400px, calc(100% - 80px));
+  margin: auto;
+  padding-top: 70px;
+}
+
+.zelora-eyebrow,
+.zelora-small-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(212,175,55,0.75);
+}
+
+.zelora-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.zelora-eyebrow span {
+  width: 35px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.zelora-hero-title {
+  margin: 35px 0 0;
+  max-width: 900px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(75px, 11vw, 165px);
+  font-weight: 400;
+  line-height: 0.77;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+}
+
+.zelora-hero-title em {
+  color: var(--gold);
+  font-weight: 400;
+  text-transform: lowercase;
+}
+
+.zelora-hero-description {
+  margin-top: 45px;
+  color: rgba(255,255,255,0.48);
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.9;
+  letter-spacing: 0.03em;
+}
+
+.zelora-gold-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  margin-top: 34px;
+  padding: 15px 20px 15px 24px;
+  overflow: hidden;
+  border: 1px solid rgba(212,175,55,0.55);
+  color: #000;
+  background: var(--gold);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  transition:
+    color 350ms ease,
+    border-color 350ms ease;
+}
+
+.zelora-gold-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-101%);
+  background: var(--light-gold);
+  transition: transform 450ms cubic-bezier(.7,0,.2,1);
+}
+
+.zelora-gold-button:hover::before {
+  transform: translateX(0);
+}
+
+.zelora-gold-button span,
+.zelora-gold-button svg {
+  position: relative;
+  z-index: 1;
+}
+
+.zelora-gold-button svg {
+  width: 17px;
+  height: 17px;
+  transition: transform 350ms ease;
+}
+
+.zelora-gold-button:hover svg {
+  transform: translateX(5px);
+}
+
+.zelora-hero-bottom {
+  position: absolute;
+  z-index: 3;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1400px, calc(100% - 80px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(255,255,255,0.3);
+  font-size: 8px;
+  letter-spacing: 0.25em;
+}
+
+.zelora-scroll-line {
+  position: absolute;
+  left: 50%;
+  width: 80px;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  transform: translateX(-50%);
+}
+
+.zelora-scroll-line span {
+  display: block;
+  width: 30%;
+  height: 100%;
+  background: var(--gold);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+
+/* ========================================================= */
+/* STATEMENT */
+/* ========================================================= */
+
+.zelora-statement,
+.zelora-categories,
+.zelora-featured,
+.zelora-trust,
+.zelora-newsletter {
+  padding: 150px 0;
+  background: #000000;
+}
+
+.zelora-categories {
+  background: #000000;
+}
+
+.zelora-section-container {
+  width: min(1400px, calc(100% - 80px));
+  margin: auto;
+}
+
+.zelora-statement {
+  background: #000000;
+}
+
+.zelora-statement h2,
+.zelora-section-header h2,
+.zelora-newsletter h2 {
+  max-width: 1000px;
+  margin: 35px 0 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(55px, 7vw, 105px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+}
+
+.zelora-statement h2 span,
+.zelora-section-header h2 i,
+.zelora-newsletter h2 i {
+  color: rgba(255,255,255,0.27);
+  font-style: italic;
+}
+
+.zelora-statement-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 50px;
+  margin-top: 80px;
+}
+
+.zelora-statement-bottom p {
+  max-width: 440px;
+  color: rgba(255,255,255,0.42);
+  font-size: 13px;
+  line-height: 2;
+}
+
+.zelora-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  color: rgba(255,255,255,0.65);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: color 300ms ease;
+}
+
+.zelora-text-link span {
+  color: var(--gold);
+  font-size: 15px;
+  transition: transform 300ms ease;
+}
+
+.zelora-text-link:hover {
+  color: white;
+}
+
+.zelora-text-link:hover span {
+  transform: translate(4px,-4px);
+}
+
+/* ========================================================= */
+/* CATEGORY */
+/* ========================================================= */
+
+.zelora-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 50px;
+  margin-bottom: 65px;
+}
+
+.zelora-outline-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.6);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all 350ms ease;
+}
+
+.zelora-outline-button span {
+  color: var(--gold);
+}
+
+.zelora-outline-button:hover {
+  border-color: rgba(212,175,55,0.5);
+  color: white;
+  background: rgba(212,175,55,0.05);
+}
+
+.zelora-category-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 12px;
+}
+
+.zelora-category-card {
+  position: relative;
+  height: 560px;
+  overflow: hidden;
+  background: var(--graphite);
+}
+
+.zelora-category-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(25%);
+  opacity: 0.7;
+  transition:
+    transform 1s cubic-bezier(.2,.7,.2,1),
+    opacity 700ms ease,
+    filter 700ms ease;
+}
+
+.zelora-category-card:hover img {
+  transform: scale(1.08);
+  opacity: 0.9;
+  filter: grayscale(0%);
+}
+
+.zelora-category-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top,
+      rgba(0,0,0,0.9),
+      rgba(0,0,0,0.1) 65%
+    );
+}
+
+.zelora-category-card::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid transparent;
+  transition: border-color 500ms ease;
+}
+
+.zelora-category-card:hover::after {
+  border-color: rgba(212,175,55,0.45);
+}
+
+.zelora-category-number {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  color: rgba(255,255,255,0.5);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+}
+
+.zelora-category-content {
+  position: absolute;
+  left: 25px;
+  right: 25px;
+  bottom: 25px;
+}
+
+.zelora-category-content p {
+  max-width: 220px;
+  margin-bottom: 15px;
+  color: rgba(255,255,255,0.45);
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.zelora-category-content h3 {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 42px;
+  font-weight: 400;
+}
+
+.zelora-category-content > span {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  color: var(--gold);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.zelora-category-content b {
+  font-size: 15px;
+  font-weight: 400;
+  transition: transform 300ms ease;
+}
+
+.zelora-category-card:hover .zelora-category-content b {
+  transform: translate(4px,-4px);
+}
+
+/* ========================================================= */
+/* GOLD DIVIDER */
+/* ========================================================= */
+
+.zelora-gold-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+}
+
+.zelora-gold-divider span {
+  display: block;
+  width: 70px;
+  height: 1px;
+  margin: auto;
+  background: var(--gold);
+  box-shadow: 0 0 18px rgba(212,175,55,0.5);
+}
+
+/* ========================================================= */
+/* PRODUCTS */
+/* ========================================================= */
+
+.zelora-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 25px;
+}
+
+.zelora-product-image {
+  position: relative;
+  height: 580px;
+  overflow: hidden;
+  background: #000000;
+}
+
+.zelora-product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(10%);
+  transition:
+    transform 900ms cubic-bezier(.2,.7,.2,1),
+    filter 500ms ease;
+}
+
+.zelora-product-card:hover .zelora-product-image img {
+  transform: scale(1.06);
+  filter: grayscale(0%);
+}
+
+.zelora-product-shine {
+  position: absolute;
+  top: -100%;
+  left: -50%;
+  width: 40%;
+  height: 300%;
+  transform: rotate(25deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.12),
+    transparent
+  );
+  transition: left 900ms ease;
+}
+
+.zelora-product-card:hover .zelora-product-shine {
+  left: 130%;
+}
+
+.zelora-product-number {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: rgba(255,255,255,0.45);
+  font-size: 9px;
+}
+
+.zelora-product-plus {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  transition:
+    background 300ms ease,
+    border-color 300ms ease,
+    color 300ms ease,
+    transform 300ms ease;
+}
+
+.zelora-product-card:hover .zelora-product-plus {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: black;
+  transform: rotate(90deg);
+}
+
+.zelora-product-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 2px;
+}
+
+.zelora-product-info p {
+  margin: 0 0 6px;
+  color: var(--gold);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+}
+
+.zelora-product-info h3 {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.zelora-product-info > span {
+  color: rgba(255,255,255,0.55);
+  font-size: 12px;
+}
+
+/* ========================================================= */
+/* EDITORIAL */
+/* ========================================================= */
+
+.zelora-editorial {
+  position: relative;
+  min-height: 750px;
+  overflow: hidden;
+}
+
+.zelora-editorial-image,
+.zelora-editorial-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.zelora-editorial-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(25%);
+}
+
+.zelora-editorial-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,0.92),
+      rgba(0,0,0,0.5),
+      rgba(0,0,0,0.65)
+    );
+}
+
+.zelora-editorial-content {
+  position: relative;
+  z-index: 2;
+  width: min(1400px, calc(100% - 80px));
+  min-height: 750px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.zelora-editorial-content h2 {
+  margin: 25px 0 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(60px, 8vw, 120px);
+  font-weight: 400;
+  line-height: 0.84;
+  letter-spacing: -0.04em;
+}
+
+.zelora-editorial-content h2 i {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.zelora-editorial-content > p:not(.zelora-small-label) {
+  margin-top: 30px;
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+}
+
+/* ========================================================= */
+/* TRUST */
+/* ========================================================= */
+
+.zelora-trust {
+  background: #000000;
+}
+
+.zelora-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.zelora-trust-grid > div {
+  padding: 60px 40px;
+  border-right: 1px solid var(--border);
+}
+
+.zelora-trust-grid > div:last-child {
+  border-right: 0;
+}
+
+.zelora-trust-grid span {
+  color: var(--gold);
+  font-size: 9px;
+}
+
+.zelora-trust-grid h3 {
+  margin: 35px 0 20px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 0.95;
+}
+
+.zelora-trust-grid p {
+  max-width: 220px;
+  color: rgba(255,255,255,0.38);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+/* ========================================================= */
+/* NEWSLETTER */
+/* ========================================================= */
+
+.zelora-newsletter {
+  text-align: center;
+}
+
+.zelora-newsletter .zelora-small-label {
+  color: var(--gold);
+}
+
+.zelora-newsletter h2 {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.zelora-newsletter > .zelora-section-container > p:not(.zelora-small-label) {
+  max-width: 420px;
+  margin: 30px auto 0;
+  color: rgba(255,255,255,0.4);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.zelora-newsletter-form {
+  width: min(500px,100%);
+  margin: 45px auto 0;
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.25);
+}
+
+.zelora-newsletter-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 15px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: white;
+  font-size: 12px;
+}
+
+.zelora-newsletter-form input::placeholder {
+  color: rgba(255,255,255,0.25);
+}
+
+.zelora-newsletter-form button {
+  border: 0;
+  background: transparent;
+  color: var(--gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.zelora-newsletter-form button span {
+  font-size: 15px;
+  transition: transform 300ms ease;
+}
+
+.zelora-newsletter-form button:hover span {
+  transform: translate(4px,-4px);
+}
+
+/* ========================================================= */
+/* FOOTER */
+/* ========================================================= */
+
+.zelora-footer {
+  border-top: 1px solid var(--border);
+  background: #000000;
+}
+
+.zelora-footer-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 80px;
+  padding: 90px 0;
+}
+
+.zelora-footer-logo {
+  font-size: 28px;
+}
+
+.zelora-footer-top > div:first-child p {
+  margin-top: 18px;
+  color: rgba(255,255,255,0.3);
+  font-family: "Cormorant Garamond", serif;
+  font-size: 20px;
+  font-style: italic;
+}
+
+.zelora-footer-links {
+  display: grid;
+  grid-template-columns: repeat(3,150px);
+  gap: 60px;
+}
+
+.zelora-footer-links div {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.zelora-footer-links span {
+  margin-bottom: 8px;
+  color: var(--gold);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+}
+
+.zelora-footer-links a {
+  color: rgba(255,255,255,0.4);
+  font-size: 10px;
+  transition: color 250ms ease;
+}
+
+.zelora-footer-links a:hover {
+  color: white;
+}
+
+.zelora-footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 0;
+  border-top: 1px solid var(--border);
+  color: rgba(255,255,255,0.22);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+
+/* ========================================================= */
+/* ANIMATIONS */
+/* ========================================================= */
+
+.zelora-fade-up {
+  animation: fadeUp 1s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.zelora-fade-up-delay {
+  animation: fadeUp 1s .12s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.zelora-fade-up-delay-2 {
+  animation: fadeUp 1s .25s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.zelora-fade-up-delay-3 {
+  animation: fadeUp 1s .38s cubic-bezier(.2,.7,.2,1) both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroOrb {
+  0%,100% {
+    transform: translate(0,0) scale(1);
+  }
+
+  50% {
+    transform: translate(-30px,20px) scale(1.04);
+  }
+}
+
+@keyframes goldPulse {
+  0%,100% {
+    opacity: .4;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: .8;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes scrollLine {
+  0% {
+    transform: translateX(-35px);
+  }
+
+  50% {
+    transform: translateX(35px);
+  }
+
+  100% {
+    transform: translateX(-35px);
+  }
+}
+
+/* ========================================================= */
+/* RESPONSIVE */
+/* ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .zelora-desktop-nav {
+    gap: 18px;
+    margin-left: 30px;
+  }
+
+  .zelora-category-grid {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .zelora-category-card {
+    height: 500px;
+  }
+
+}
+
+@media (max-width: 800px) {
+
+  .zelora-nav-inner,
+  .zelora-hero-content,
+  .zelora-hero-bottom,
+  .zelora-section-container,
+  .zelora-editorial-content {
+    width: min(100% - 40px, 1400px);
+  }
+
+  .zelora-desktop-nav {
+    display: none;
+  }
+
+  .zelora-nav {
+    height: 70px;
+  }
+
+  .zelora-hero-title {
+    font-size: clamp(65px, 18vw, 105px);
+  }
+
+  .zelora-hero-bottom {
+    bottom: 25px;
+  }
+
+  .zelora-hero-bottom > span:first-child {
+    display: none;
+  }
+
+  .zelora-statement,
+  .zelora-categories,
+  .zelora-featured,
+  .zelora-trust,
+  .zelora-newsletter {
+    padding: 100px 0;
+  }
+
+  .zelora-statement-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 50px;
+  }
+
+  .zelora-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+
+  .zelora-category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .zelora-category-card {
+    height: 480px;
+  }
+
+  .zelora-product-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .zelora-product-image {
+    height: 520px;
+  }
+
+  .zelora-editorial,
+  .zelora-editorial-content {
+    min-height: 650px;
+  }
+
+  .zelora-trust-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .zelora-trust-grid > div {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .zelora-trust-grid > div:last-child {
+    border-bottom: 0;
+  }
+
+  .zelora-footer-top {
+    flex-direction: column;
+    padding: 70px 0;
+  }
+
+  .zelora-footer-links {
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+  }
+
+  .zelora-footer-bottom {
+    flex-direction: column;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .zelora-nav-actions {
+    gap: 4px;
+  }
+
+  .zelora-icon-button,
+  .zelora-cart {
+    width: 35px;
+    height: 35px;
+  }
+
+  .zelora-logo {
+    font-size: 17px;
+  }
+
+  .zelora-hero-title {
+    font-size: 65px;
+  }
+
+  .zelora-hero-description br {
+    display: none;
+  }
+
+  .zelora-footer-links {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .zelora-footer-links div:last-child {
+    grid-column: 1 / -1;
+  }
+
+}
+/* =========================================================
+   ZYRA — PREMIUM MOTION SYSTEM
+========================================================= */
+
+:root {
+  --zelora-gold: #c8a15a;
+  --zelora-gold-light: #e3c47c;
+  --zelora-black: #000000;
+}
+
+/* ---------------------------------------------------------
+   MAGNETIC ELEMENTS
+--------------------------------------------------------- */
+
+.zelora-magnetic {
+  position: relative;
+  transition:
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 400ms ease,
+    background-color 400ms ease;
+
+  will-change: transform;
+}
+
+.zelora-magnetic:hover {
+  box-shadow:
+    0 12px 40px rgba(200, 161, 90, 0.14);
+}
+
+
+/* ---------------------------------------------------------
+   PREMIUM PILL BUTTON
+--------------------------------------------------------- */
+
+.zelora-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  min-height: 48px;
+  padding: 0 25px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(200, 161, 90, 0.45);
+
+  background:
+    linear-gradient(
+      135deg,
+      #d8b568,
+      #b78d42
+    );
+
+  color: #000000;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  overflow: hidden;
+
+  transition:
+    transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 500ms ease,
+    background 500ms ease;
+}
+
+.zelora-pill::before {
+  content: "";
+
+  position: absolute;
+
+  inset: -100%;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 35%,
+      rgba(255,255,255,0.45) 50%,
+      transparent 65%
+    );
+
+  transform: translateX(-100%);
+  transition:
+    transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.zelora-pill:hover::before {
+  transform: translateX(100%);
+}
+
+.zelora-pill:hover {
+  box-shadow:
+    0 15px 50px rgba(200, 161, 90, 0.25),
+    0 0 35px rgba(200, 161, 90, 0.08);
+}
+
+
+/* ---------------------------------------------------------
+   REVEAL ANIMATIONS
+--------------------------------------------------------- */
+
+.zelora-reveal {
+  opacity: 0;
+
+  transition:
+    opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  will-change: opacity, transform;
+}
+
+.zelora-reveal-up {
+  transform: translate3d(0, 70px, 0);
+}
+
+.zelora-reveal-down {
+  transform: translate3d(0, -70px, 0);
+}
+
+.zelora-reveal-left {
+  transform: translate3d(-70px, 0, 0);
+}
+
+.zelora-reveal-right {
+  transform: translate3d(70px, 0, 0);
+}
+
+.zelora-reveal-fade {
+  transform: scale(0.97);
+}
+
+.zelora-reveal-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+
+/* ---------------------------------------------------------
+   TILT CARDS
+--------------------------------------------------------- */
+
+.zelora-tilt {
+  transform:
+    perspective(1000px)
+    rotateX(0deg)
+    rotateY(0deg)
+    translateY(0);
+
+  transition:
+    transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  transform-style: preserve-3d;
+
+  will-change: transform;
+}
+
+
+/* ---------------------------------------------------------
+   PRODUCT IMAGE
+--------------------------------------------------------- */
+
+.product-card {
+  overflow: hidden;
+  transition:
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 500ms ease,
+    box-shadow 600ms ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(200, 161, 90, 0.3);
+  box-shadow:
+    0 25px 70px rgba(0,0,0,0.5);
+}
+
+.product-card .product-image {
+  overflow: hidden;
+  position: relative;
+}
+
+.product-card .product-image img {
+  transition:
+    transform 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 900ms ease;
+  will-change: transform;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.08);
+  filter: brightness(1.08);
+}
+
+
+/* ---------------------------------------------------------
+   IMAGE LIGHT SWEEP
+--------------------------------------------------------- */
+
+.product-card .product-image::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 30%,
+      rgba(255,255,255,0.10) 50%,
+      transparent 70%
+    );
+
+  transform:
+    translateX(-120%);
+
+  transition:
+    transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  pointer-events: none;
+}
+
+.product-card:hover .product-image::after {
+  transform:
+    translateX(120%);
+}
+
+
+/* ---------------------------------------------------------
+   QUICK VIEW
+--------------------------------------------------------- */
+
+.quick-add {
+  transform:
+    translateY(18px);
+
+  opacity: 0;
+
+  transition:
+    opacity 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover .quick-add {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ---------------------------------------------------------
+   WISHLIST
+--------------------------------------------------------- */
+
+.wishlist {
+  transition:
+    transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 400ms ease,
+    border-color 400ms ease;
+}
+
+.wishlist:hover {
+  transform: scale(1.12);
+  border-color: rgba(200, 161, 90, 0.5);
+  background: rgba(200, 161, 90, 0.12);
+}
+
+
+/* ---------------------------------------------------------
+   HERO IMAGE
+--------------------------------------------------------- */
+
+.hero-image {
+  animation:
+    zeloraHeroFloat 12s ease-in-out infinite alternate;
+}
+
+@keyframes zeloraHeroFloat {
+  0% {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: scale(1.10) translate3d(-1%, -1%, 0);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   HERO CONTENT
+--------------------------------------------------------- */
+
+.hero-content > * {
+  animation:
+    zeloraHeroReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1)
+    both;
+}
+
+.hero-content > *:nth-child(1) {
+  animation-delay: 150ms;
+}
+
+.hero-content > *:nth-child(2) {
+  animation-delay: 250ms;
+}
+
+.hero-content > *:nth-child(3) {
+  animation-delay: 350ms;
+}
+
+.hero-content > *:nth-child(4) {
+  animation-delay: 500ms;
+}
+
+@keyframes zeloraHeroReveal {
+  from {
+    opacity: 0;
+    transform:
+      translate3d(0, 35px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translate3d(0, 0, 0);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   SECTION HEADINGS
+--------------------------------------------------------- */
+
+.section-heading h2 {
+  transition:
+    letter-spacing 800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-heading:hover h2 {
+  letter-spacing: 0.06em;
+}
+
+
+/* ---------------------------------------------------------
+   GOLD LINE
+--------------------------------------------------------- */
+
+.section-heading span {
+  position: relative;
+  display: block;
+
+  width: 70px;
+  height: 1px;
+
+  margin: 14px auto 0;
+
+  background: var(--zelora-gold);
+
+  transition:
+    width 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-heading:hover span {
+  width: 120px;
+}
+
+
+/* ---------------------------------------------------------
+   NAV LINKS
+--------------------------------------------------------- */
+
+header a,
+nav a {
+  position: relative;
+}
+
+header a::after,
+nav a::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  bottom: -7px;
+
+  width: 0;
+  height: 1px;
+
+  background: var(--zelora-gold);
+
+  transform: translateX(-50%);
+
+  transition:
+    width 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+header a:hover::after,
+nav a:hover::after {
+  width: 70%;
+}
+
+
+/* ---------------------------------------------------------
+   CURSOR GLOW
+--------------------------------------------------------- */
+
+.zelora-cursor-glow {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 300px;
+  height: 300px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(200, 161, 90, 0.09) 0%,
+      rgba(200, 161, 90, 0.035) 30%,
+      transparent 70%
+    );
+
+  pointer-events: none;
+
+  z-index: 9999;
+
+  mix-blend-mode: screen;
+
+  filter: blur(2px);
+
+  opacity: 0.7;
+}
+
+
+/* ---------------------------------------------------------
+   SMOOTH GLOBAL INTERACTION
+--------------------------------------------------------- */
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  transition-timing-function:
+    cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* ---------------------------------------------------------
+   REDUCED MOTION
+--------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .zelora-cursor-glow {
+    display: none;
+  }
+}
+
+
+/* ---------------------------------------------------------
+   TOUCH DEVICES
+--------------------------------------------------------- */
+
+@media (hover: none) {
+  .zelora-cursor-glow {
+    display: none;
+  }
+
+  .quick-add {
+    opacity: 1;
+    transform: none;
+  }
+
+  .product-card:hover {
+    transform: none;
+  }
+}
+/* =========================================================
+   ZYRA GLOBAL PREMIUM FINISH
+   Shared foundation for the complete motion system.
+========================================================= */
+
+:root {
+ --zelora-gold: #FFD700;
+--zelora-gold-light: #FFE87A;
+--zelora-black: #000000;
+--zelora-ivory: #f4f1eb;
+  --zelora-ease: cubic-bezier(.16,1,.3,1);
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(213,177,93,.55) #000000;
+}
+
+body {
+  overscroll-behavior-x: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  transition-timing-function: var(--zelora-ease);
+}
+
+button,
+.gold-pill,
+.outline-pill,
+.zelora-pill,
+.newsletter-form button,
+.hero-arrow,
+.icon-btn,
+.cart-btn,
+.wishlist,
+.socials a,
+.quick-add,
+.dot {
+  border-radius: 9999px;
+}
+
+::selection {
+  background: var(--zelora-gold);
+  color: #000000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+
+/* =========================================================
+   ZELORA — DYNAMIC CATEGORY SHOWCASE
+   Desktop: fluid grid based on live category count.
+   Mobile: premium infinite carousel with swipe + arrows.
+========================================================= */
+
+.zelora-category-showcase-desktop {
+  --category-gap: clamp(8px, 0.8vw, 14px);
+  display: grid;
+  grid-template-columns: repeat(var(--category-count), minmax(0, 1fr));
+  gap: var(--category-gap);
+  width: 100%;
+}
+
+.zelora-category-showcase-card {
+  position: relative;
+  display: block;
+  min-width: 0;
+  height: clamp(360px, 38vw, 560px);
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 14px;
+  background: #000000;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.28);
+  transform: translateZ(0);
+  transition:
+    transform 900ms cubic-bezier(.16,1,.3,1),
+    border-color 700ms ease,
+    box-shadow 900ms ease;
+}
+
+.zelora-category-showcase-card:hover {
+  z-index: 2;
+  transform: translateY(-8px) scale(1.012);
+  border-color: rgba(213, 177, 93, 0.42);
+  box-shadow:
+    0 35px 90px rgba(0, 0, 0, 0.5),
+    0 0 45px rgba(213, 177, 93, 0.07);
+}
+
+.zelora-category-showcase-media,
+.zelora-category-showcase-media img,
+.zelora-category-showcase-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.zelora-category-showcase-media img {
+  display: block;
+  object-fit: cover;
+  filter: saturate(.78) contrast(1.03) brightness(.76);
+  transform: scale(1.015);
+  transition:
+    transform 1.4s cubic-bezier(.16,1,.3,1),
+    filter 1s ease;
+}
+
+.zelora-category-showcase-card:hover .zelora-category-showcase-media img {
+  transform: scale(1.09);
+  filter: saturate(.98) contrast(1.05) brightness(.88);
+}
+
+.zelora-category-showcase-fallback {
+  background:
+    radial-gradient(circle at 50% 20%, rgba(213,177,93,.18), transparent 38%),
+    radial-gradient(circle at 50% 90%, rgba(255,255,255,.04), transparent 50%),
+    #101010;
+}
+
+.zelora-category-showcase-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.12) 42%, rgba(0,0,0,.92) 100%),
+    linear-gradient(90deg, rgba(0,0,0,.18), transparent 45%, rgba(0,0,0,.18));
+  pointer-events: none;
+}
+
+.zelora-category-showcase-sheen {
+  position: absolute;
+  inset: -30% -80%;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 42%, rgba(255,255,255,.14) 50%, transparent 58%);
+  transform: translateX(-42%) rotate(0.001deg);
+  transition: transform 1.3s cubic-bezier(.16,1,.3,1);
+}
+
+.zelora-category-showcase-card:hover .zelora-category-showcase-sheen {
+  transform: translateX(42%) rotate(0.001deg);
+}
+
+.zelora-category-showcase-frame {
+  position: absolute;
+  inset: 11px;
+  z-index: 5;
+  border: 1px solid rgba(255,255,255,0);
+  pointer-events: none;
+  transition:
+    border-color 700ms ease,
+    box-shadow 700ms ease;
+}
+
+.zelora-category-showcase-card:hover .zelora-category-showcase-frame {
+  border-color: rgba(213,177,93,.4);
+  box-shadow: inset 0 0 50px rgba(213,177,93,.05);
+}
+
+.zelora-category-showcase-index {
+  position: absolute;
+  top: 20px;
+  left: 21px;
+  z-index: 6;
+  color: rgba(255,255,255,.55);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: .22em;
+}
+
+.zelora-category-showcase-index::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  margin: 0 9px 3px 0;
+  background: rgba(213,177,93,.7);
+}
+
+.zelora-category-showcase-info {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  left: 22px;
+  z-index: 6;
+}
+
+.zelora-category-showcase-name-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.zelora-category-showcase-name-row h3 {
+  margin: 0;
+  max-width: calc(100% - 42px);
+  color: #f5f1e9;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(27px, 2.5vw, 42px);
+  font-weight: 500;
+  line-height: .9;
+  letter-spacing: -.025em;
+  transition: letter-spacing 700ms cubic-bezier(.16,1,.3,1), color 450ms ease;
+}
+
+.zelora-category-showcase-card:hover .zelora-category-showcase-name-row h3 {
+  color: #fff;
+  letter-spacing: .005em;
+}
+
+.zelora-category-showcase-arrow {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(213,177,93,.45);
+  border-radius: 50%;
+  color: var(--zelora-gold, #d5b15d);
+  background: rgba(0,0,0,.18);
+  transition:
+    transform 600ms cubic-bezier(.16,1,.3,1),
+    background 450ms ease,
+    color 450ms ease;
+}
+
+.zelora-category-showcase-card:hover .zelora-category-showcase-arrow {
+  color: #000000 !important;
+  background: var(--zelora-gold, #d5b15d);
+  border-color: var(--zelora-gold, #d5b15d);
+  transform: translate(3px,-3px) rotate(-2deg);
+}
+
+
+
+.zelora-category-showcase-cta {
+  display: block;
+  margin-top: 11px;
+  color: rgba(255,255,255,.46);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.zelora-category-showcase-mobile {
+  display: none;
+}
+
+@media (max-width: 1100px) and (min-width: 801px) {
+  .zelora-category-showcase-card {
+    height: clamp(330px, 42vw, 500px);
+  }
+
+  .zelora-category-showcase-name-row h3 {
+    font-size: clamp(25px, 2.8vw, 36px);
+  }
+}
+
+@media (max-width: 800px) {
+  .zelora-category-showcase-desktop {
+    display: none;
+  }
+
+  .zelora-category-showcase-mobile {
+    /*
+      Mobile is intentionally a full-bleed carousel inside the section's
+      existing content width. There is NO preview/reveal of the next card.
+    */
+    --category-slide-gap: 0px;
+
+    /*
+      IMPORTANT:
+      The track is width:max-content. A percentage used inside
+      translate3d() resolves against the TRACK width, not the viewport.
+      That was causing the active slide to fly far left and exposing
+      a thin sliver of another card.
+
+      Use an absolute viewport-based length for both the card width
+      and the transform step.
+    */
+    --category-slide-width: calc(100vw - 40px);
+    --category-slide-step: calc(100vw - 40px);
+
+    display: block;
+    width: 100%;
+    min-width: 0;
+    position: relative;
+  }
+
+  .zelora-category-showcase-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin: -6px 0 18px;
+  }
+
+  .zelora-category-showcase-controls > span {
+    color: rgba(255,255,255,.34);
+    font-size: 7px;
+    font-weight: 500;
+    letter-spacing: .22em;
+  }
+
+  .zelora-category-showcase-arrows {
+    display: flex;
+    gap: 7px;
+  }
+
+  .zelora-category-showcase-arrows button {
+    position: relative;
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid rgba(213,177,93,.28);
+    border-radius: 50%;
+    outline: none;
+    color: rgba(255,255,255,.75);
+    background:
+      radial-gradient(circle at 50% 45%, rgba(213,177,93,.10), transparent 65%),
+      rgba(255,255,255,.025);
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    transition:
+      transform 450ms cubic-bezier(.16,1,.3,1),
+      color 350ms ease,
+      background 350ms ease,
+      border-color 350ms ease,
+      box-shadow 450ms ease;
+  }
+
+  .zelora-category-showcase-arrows button::before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: inherit;
+    border: 1px solid rgba(255,255,255,.055);
+    pointer-events: none;
+  }
+
+  .zelora-category-showcase-arrows button:active {
+    transform: scale(.90);
+  }
+
+  .zelora-category-showcase-arrows button:hover {
+  color: #000000 !important;
+  background: var(--zelora-gold, #d5b15d) !important;
+  border-color: var(--zelora-gold, #d5b15d) !important;
+  box-shadow:
+    0 8px 30px rgba(213,177,93,.20),
+    0 0 24px rgba(213,177,93,.12);
+}
+
+.zelora-category-showcase-arrows button:hover svg,
+.zelora-category-showcase-arrows button:hover svg *,
+.zelora-category-showcase-arrows button:hover path {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  fill: #000000 !important;
+}
+
+  .zelora-category-showcase-viewport {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    touch-action: pan-y;
+    cursor: grab;
+    -webkit-user-select: none;
+    user-select: none;
+    position: relative;
+    border-radius: 15px;
+  }
+
+  .zelora-category-showcase-viewport:active {
+    cursor: grabbing;
+  }
+
+  .zelora-category-showcase-viewport::before {
+    content: "";
+    position: absolute;
+    z-index: 20;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(213,177,93,.08),
+        transparent 7%,
+        transparent 93%,
+        rgba(213,177,93,.08)
+      );
+    opacity: .45;
+  }
+
+  .zelora-category-showcase-track {
+    display: flex;
+    gap: var(--category-slide-gap);
+    width: max-content;
+    will-change: transform;
+  }
+
+  .zelora-category-showcase-slide {
+    width: var(--category-slide-width);
+    min-width: var(--category-slide-width);
+    flex: 0 0 var(--category-slide-width);
+    opacity: .82;
+    transform: scale(.965);
+    transition:
+      opacity 900ms cubic-bezier(.16,1,.3,1),
+      transform 900ms cubic-bezier(.16,1,.3,1);
+  }
+
+  .zelora-category-showcase-slide.is-active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+  }
+
+  /*
+    Luxury focus treatment:
+    the active category feels physically closer without introducing
+    the cheap "3D carousel" look.
+  */
+  .zelora-category-showcase-slide.is-active
+  .zelora-category-showcase-card.is-mobile {
+    animation: zeloraCategoryFocus 1200ms cubic-bezier(.16,1,.3,1) both;
+  }
+
+  .zelora-category-showcase-card.is-mobile {
+    position: relative;
+    width: 100%;
+    height: min(112vw, 500px);
+    min-height: 390px;
+    border-radius: 15px;
+    overflow: hidden;
+    border-color: rgba(213,177,93,.30);
+    box-shadow:
+      0 28px 80px rgba(0,0,0,.48),
+      0 0 55px rgba(213,177,93,.055);
+    transition:
+      border-color 800ms ease,
+      box-shadow 900ms cubic-bezier(.16,1,.3,1);
+  }
+
+  .zelora-category-showcase-card.is-mobile::before {
+    content: "";
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        circle at 50% 38%,
+        rgba(213,177,93,.075),
+        transparent 38%
+      );
+    mix-blend-mode: screen;
+    opacity: .65;
+    animation: zeloraCategoryAura 7s ease-in-out infinite;
+  }
+
+  .zelora-category-showcase-card.is-mobile::after {
+    content: "";
+    position: absolute;
+    z-index: 7;
+    inset: 10px;
+    pointer-events: none;
+    border: 1px solid rgba(213,177,93,.20);
+    border-radius: 10px;
+    box-shadow:
+      inset 0 0 35px rgba(213,177,93,.045),
+      0 0 20px rgba(213,177,93,.025);
+    opacity: .9;
+  }
+
+  .zelora-category-showcase-slide.is-active
+  .zelora-category-showcase-card.is-mobile {
+    border-color: rgba(213,177,93,.52);
+    box-shadow:
+      0 34px 90px rgba(0,0,0,.58),
+      0 0 75px rgba(213,177,93,.085);
+  }
+
+  .zelora-category-showcase-card.is-mobile:hover {
+    transform: none;
+  }
+
+  .zelora-category-showcase-card.is-mobile .zelora-category-showcase-media img {
+    filter: saturate(.82) contrast(1.02) brightness(.72);
+    transform: scale(1.045);
+    animation: zeloraCategoryImageDrift 9s ease-in-out infinite alternate;
+  }
+
+  .zelora-category-showcase-slide.is-active
+  .zelora-category-showcase-media img {
+    filter: saturate(.90) contrast(1.04) brightness(.78);
+  }
+
+  .zelora-category-showcase-card.is-mobile .zelora-category-showcase-vignette {
+    background:
+      radial-gradient(
+        ellipse at 50% 35%,
+        transparent 20%,
+        rgba(0,0,0,.12) 54%,
+        rgba(0,0,0,.86) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(0,0,0,.03) 0%,
+        rgba(0,0,0,.08) 42%,
+        rgba(0,0,0,.92) 100%
+      );
+  }
+
+  .zelora-category-showcase-card.is-mobile .zelora-category-showcase-sheen {
+    inset: -40% -100%;
+    opacity: .65;
+    transform: translateX(-65%) rotate(7deg);
+    animation: zeloraCategorySheen 7s cubic-bezier(.16,1,.3,1) infinite;
+  }
+
+  .zelora-category-showcase-card.is-mobile .zelora-category-showcase-frame {
+    inset: 10px;
+    border-color: rgba(213,177,93,.18);
+    box-shadow: inset 0 0 35px rgba(213,177,93,.035);
+  }
+
+  .zelora-category-showcase-card.is-mobile .zelora-category-showcase-index {
+    top: 20px;
+    left: 21px;
+    color: rgba(255,255,255,.62);
+  }
+
+  .zelora-category-showcase-card.is-mobile .zelora-category-showcase-info {
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+  }
+
+  .zelora-category-showcase-card.is-mobile .zelora-category-showcase-name-row h3 {
+    font-size: clamp(32px, 9vw, 48px);
+    text-shadow: 0 8px 35px rgba(0,0,0,.45);
+  }
+
+  .zelora-category-showcase-card.is-mobile .zelora-category-showcase-arrow {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+    background: rgba(0,0,0,.30);
+    box-shadow: 0 0 25px rgba(213,177,93,.06);
+  }
+
+  .zelora-category-showcase-card.is-mobile .zelora-category-showcase-cta {
+    margin-top: 13px;
+  }
+
+  .zelora-category-showcase-progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 17px;
+  }
+
+  .zelora-category-showcase-progress span {
+    width: 17px;
+    height: 1px;
+    background: rgba(255,255,255,.16);
+    box-shadow: 0 0 0 rgba(213,177,93,0);
+    transition:
+      width 500ms cubic-bezier(.16,1,.3,1),
+      background 400ms ease,
+      box-shadow 500ms ease;
+  }
+
+  .zelora-category-showcase-progress span.active {
+    width: 34px;
+    background: var(--zelora-gold, #d5b15d);
+    box-shadow: 0 0 12px rgba(213,177,93,.38);
+  }
+
+  @keyframes zeloraCategoryImageDrift {
+    0% {
+      transform: scale(1.045) translate3d(0,0,0);
+    }
+    100% {
+      transform: scale(1.09) translate3d(-.8%,-.5%,0);
+    }
+  }
+
+  @keyframes zeloraCategoryAura {
+    0%, 100% {
+      opacity: .48;
+      transform: scale(1);
+    }
+    50% {
+      opacity: .78;
+      transform: scale(1.04);
+    }
+  }
+
+  @keyframes zeloraCategorySheen {
+    0%, 54% {
+      transform: translateX(-65%) rotate(7deg);
+      opacity: 0;
+    }
+    62% {
+      opacity: .18;
+    }
+    82% {
+      transform: translateX(65%) rotate(7deg);
+      opacity: .42;
+    }
+    100% {
+      transform: translateX(95%) rotate(7deg);
+      opacity: 0;
+    }
+  }
+
+  @keyframes zeloraCategoryFocus {
+    from {
+      filter: brightness(.94);
+    }
+    to {
+      filter: brightness(1);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zelora-category-showcase-card,
+  .zelora-category-showcase-media img,
+  .zelora-category-showcase-sheen,
+  .zelora-category-showcase-frame,
+  .zelora-category-showcase-name-row h3,
+  .zelora-category-showcase-arrow,
+  .zelora-category-showcase-progress span {
+    transition: none !important;
+  }
+}
+
+
+/* =========================================================
+   ZELORA — DEEP BLACK CORE BACKGROUND
+   Keeps gold accents/effects, but forces the page's core
+   surfaces to true #000000.
+========================================================= */
+
+html,
+body,
+.zelora-page,
+.zelora-statement,
+.zelora-categories,
+.zelora-featured,
+.zelora-trust,
+.zelora-newsletter,
+.zelora-footer {
+  background-color: #000000 !important;
+}
+
+/* Keep the hero visually rich, but remove the warm/grey base
+   from the actual surface. Gold effects remain visible. */
+.zelora-hero {
+  background-color: #000000 !important;
+}
+
+/* Prevent fallback category surfaces from appearing charcoal. */
+.zelora-category-showcase-card,
+.zelora-product-image {
+  background-color: #000000;
+}
+
+/* The old category fallback used #101010, which made empty
+   category areas visibly lighter than the core background. */
+.zelora-category-showcase-fallback {
+  background:
+    radial-gradient(circle at 50% 20%, rgba(213,177,93,.12), transparent 38%),
+    radial-gradient(circle at 50% 90%, rgba(255,255,255,.025), transparent 50%),
+    #000000;
+}
+
+
+/* =========================================================
+   ZELORA — TRUE BLACK BACKGROUND / NO GOLD SURFACES
+   Only removes decorative gold/yellow background washes,
+   circles, glows and fallback fills. Text, borders and
+   gold action buttons remain unchanged.
+========================================================= */
+
+/* Core page surfaces */
+html,
+body,
+.zelora-page,
+.zelora-hero,
+.zelora-statement,
+.zelora-categories,
+.zelora-featured,
+.zelora-trust,
+.zelora-newsletter,
+.zelora-footer {
+  background: #000000 !important;
+  background-color: #000000 !important;
+}
+
+/* Remove the large decorative gold hero circle and glow */
+.zelora-hero::after,
+.zelora-hero-glow {
+  display: none !important;
+}
+
+/* Remove gold/grey radial washes from the hero itself */
+.zelora-hero {
+  background: #000000 !important;
+}
+
+/* Category fallback must be pure black */
+.zelora-category-showcase-fallback {
+  background: #000000 !important;
+}
+
+/* Remove gold aura/wash from mobile category cards */
+.zelora-category-showcase-card.is-mobile::before {
+  display: none !important;
+}
+
+/* Remove the gold side wash over the mobile category viewport */
+.zelora-category-showcase-viewport::before {
+  display: none !important;
+}
+
+/* Remove gold radial wash from category showcase controls */
+.zelora-category-showcase-arrows button {
+  background: rgba(255,255,255,.025) !important;
+}
+
+/* Keep category/product surfaces absolutely black */
+.zelora-category-showcase-card,
+.zelora-product-image {
+  background: #000000 !important;
+}

@@ -1,0 +1,667 @@
+/* Search page owns its visual layer.
+   The cursor glow is a fixed sibling/outside element, so scope the hide
+   from body while .search-page exists instead of relying on inheritance. */
+body:has(.search-page) .zelora-cursor-glow,
+body:has(.search-page) .zyra-cursor-glow {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+        .search-page {
+          min-height: 100vh;
+          position: relative;
+          overflow: hidden;
+          isolation: isolate;
+          background:
+            radial-gradient(
+              circle at 50% 18%,
+              rgba(239, 191, 4, 0.1),
+              transparent 28%
+            ),
+            #070707;
+          color: #f4f0e8;
+          font-family: inherit;
+        }
+
+        .search-shell {
+          width: min(1400px, calc(100% - 80px));
+          margin: 0 auto;
+          padding: 42px 0 110px;
+          position: relative;
+          z-index: 1;
+        }
+
+        .back-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          color: rgba(255, 255, 255, 0.52);
+          text-decoration: none;
+          font-size: 10px;
+          letter-spacing: 0.24em;
+          font-weight: 600;
+          transition: color 220ms ease;
+        }
+
+        .back-link:hover {
+          color: #EFBF04;
+        }
+
+        .back-link span {
+          font-size: 16px;
+          line-height: 1;
+        }
+
+        .search-heading {
+          text-align: center;
+          padding: 72px 20px 48px;
+        }
+
+        .eyebrow,
+        .search-meta,
+        .results-header p,
+        .search-intro > p,
+        .empty-state > p,
+        .load-error-state > p,
+        .category {
+          margin: 0;
+          color: #EFBF04;
+          font-size: 10px;
+          letter-spacing: 0.28em;
+          font-weight: 600;
+        }
+
+        .search-heading h1 {
+          margin: 17px 0 16px;
+          font-family: Georgia, "Times New Roman", serif;
+          font-weight: 400;
+          font-size: clamp(52px, 7vw, 92px);
+          line-height: 0.98;
+          letter-spacing: -0.04em;
+        }
+
+        .search-heading h1 span {
+          color: #EFBF04;
+        }
+
+        .intro {
+          margin: 0 auto;
+          max-width: 540px;
+          color: rgba(255, 255, 255, 0.54);
+          font-size: 15px;
+          line-height: 1.8;
+        }
+
+        .search-box-wrap {
+          width: min(900px, 100%);
+          margin: 0 auto;
+        }
+
+        /* Premium capsule search field */
+        .search-box {
+          height: 76px;
+          display: flex;
+          align-items: center;
+          gap: 19px;
+          padding: 0 25px;
+          border: 1px solid rgba(239, 191, 4, 0.3);
+          border-radius: 999px;
+          background:
+            linear-gradient(
+              180deg,
+              rgba(255, 255, 255, 0.055),
+              rgba(255, 255, 255, 0.025)
+            );
+          box-shadow:
+            inset 0 1px rgba(255, 255, 255, 0.035),
+            0 20px 80px rgba(0, 0, 0, 0.24);
+          transition:
+            border-color 220ms ease,
+            box-shadow 220ms ease,
+            background 220ms ease,
+            transform 220ms ease;
+        }
+
+        .search-box:focus-within,
+        .search-box.has-value {
+          border-color: rgba(239, 191, 4, 0.72);
+          background:
+            linear-gradient(
+              180deg,
+              rgba(255, 255, 255, 0.07),
+              rgba(255, 255, 255, 0.03)
+            );
+          box-shadow:
+            0 0 0 1px rgba(239, 191, 4, 0.08),
+            0 22px 90px rgba(239, 191, 4, 0.12);
+        }
+
+        .search-box:focus-within {
+          transform: translateY(-1px);
+        }
+
+        .search-box > svg {
+          width: 22px;
+          height: 22px;
+          flex: 0 0 22px;
+          fill: none;
+          stroke: #EFBF04;
+          stroke-width: 1.35;
+        }
+
+        .search-box input {
+          width: 100%;
+          min-width: 0;
+          border: 0;
+          outline: 0;
+          background: transparent;
+          color: #fff;
+          font: inherit;
+          font-size: 16px;
+          letter-spacing: 0.03em;
+        }
+
+        .search-box input::placeholder {
+          color: rgba(255, 255, 255, 0.34);
+        }
+
+        .clear-button {
+          width: 34px;
+          height: 34px;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 50%;
+          background: rgba(0, 0, 0, 0.18);
+          color: rgba(255, 255, 255, 0.62);
+          display: grid;
+          place-items: center;
+          cursor: pointer;
+          flex: 0 0 auto;
+          transition: 180ms ease;
+        }
+
+        .clear-button:hover {
+          border-color: rgba(239, 191, 4, 0.6);
+          color: #EFBF04;
+          transform: rotate(90deg);
+        }
+
+        .clear-button svg {
+          width: 15px;
+          height: 15px;
+          stroke: currentColor;
+        }
+
+        .search-meta {
+          display: flex;
+          justify-content: flex-end;
+          padding-top: 12px;
+          color: rgba(255, 255, 255, 0.3);
+          letter-spacing: 0.2em;
+          font-size: 8px;
+        }
+
+        .search-intro {
+          padding: 105px 20px 50px;
+          text-align: center;
+        }
+
+        .intro-mark {
+          color: #EFBF04;
+          font-size: 23px;
+          margin-bottom: 16px;
+        }
+
+        .search-intro > p {
+          color: rgba(255, 255, 255, 0.38);
+        }
+
+        .suggestions {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 12px;
+          margin-top: 25px;
+        }
+
+        .suggestions button,
+        .view-all,
+        .browse-button {
+          display: inline-flex;
+          align-items: center;
+          gap: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.025);
+          color: rgba(255, 255, 255, 0.7);
+          padding: 13px 17px;
+          font: inherit;
+          font-size: 10px;
+          letter-spacing: 0.16em;
+          cursor: pointer;
+          text-decoration: none;
+          transition: 220ms ease;
+        }
+
+        .suggestions button:hover,
+        .view-all:hover {
+          color: #EFBF04;
+          border-color: rgba(239, 191, 4, 0.55);
+          background: rgba(239, 191, 4, 0.05);
+        }
+
+        .suggestions svg,
+        .view-all svg,
+        .view-piece svg,
+        .browse-button svg {
+          width: 15px;
+          height: 15px;
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 1.35;
+        }
+
+        .results-section {
+          padding-top: 70px;
+        }
+
+        .results-header {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 30px;
+          margin-bottom: 28px;
+          padding-bottom: 20px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+        }
+
+        .results-header h2 {
+          margin: 10px 0 0;
+          font-family: Georgia, "Times New Roman", serif;
+          font-weight: 400;
+          font-size: clamp(28px, 3vw, 42px);
+          letter-spacing: -0.02em;
+        }
+
+        .results-header h2 span {
+          color: #EFBF04;
+        }
+
+        .results-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 24px;
+        }
+
+        .product-card {
+          min-width: 0;
+          opacity: 0;
+          animation: reveal 650ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .image-link {
+          display: block;
+          color: inherit;
+          text-decoration: none;
+        }
+
+        .image-wrap {
+          position: relative;
+          aspect-ratio: 0.82;
+          overflow: hidden;
+          background: #111;
+          border-radius: 4px;
+        }
+
+        .image-wrap > img {
+          width: 100%;
+          height: 100%;
+          display: block;
+          object-fit: cover;
+          transition: transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+        }
+
+        .image-link:hover img {
+          transform: scale(1.045);
+        }
+
+        .image-shade {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.25),
+            transparent 35%,
+            rgba(0, 0, 0, 0.5)
+          );
+          pointer-events: none;
+        }
+
+        .product-tag {
+          position: absolute;
+          top: 16px;
+          left: 16px;
+          padding: 8px 11px;
+          border: 1px solid rgba(255, 255, 255, 0.24);
+          border-radius: 999px;
+          background: rgba(10, 10, 10, 0.55);
+          backdrop-filter: blur(10px);
+          color: rgba(255, 255, 255, 0.82);
+          font-size: 8px;
+          letter-spacing: 0.18em;
+        }
+
+        .wishlist {
+          position: absolute;
+          top: 13px;
+          right: 13px;
+          width: 43px;
+          height: 43px;
+          border: 1px solid rgba(255, 255, 255, 0.22);
+          border-radius: 50%;
+          display: grid;
+          place-items: center;
+          color: white;
+          background: rgba(0, 0, 0, 0.28);
+          backdrop-filter: blur(9px);
+          cursor: pointer;
+          transition: 220ms ease;
+        }
+
+        .wishlist:hover,
+        .wishlist.active {
+          color: #EFBF04;
+          border-color: rgba(239, 191, 4, 0.65);
+        }
+
+        .wishlist svg {
+          width: 18px;
+          height: 18px;
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 1.35;
+        }
+
+        .wishlist.active svg {
+          fill: currentColor;
+        }
+
+        .view-piece {
+          position: absolute;
+          left: 18px;
+          right: 18px;
+          bottom: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          color: #fff;
+          font-size: 9px;
+          letter-spacing: 0.2em;
+          opacity: 0;
+          transform: translateY(8px);
+          transition: 280ms ease;
+        }
+
+        .image-link:hover .view-piece {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .product-info {
+          display: flex;
+          justify-content: space-between;
+          gap: 15px;
+          padding: 16px 2px 0;
+        }
+
+        .category {
+          margin-bottom: 7px;
+          color: #EFBF04;
+          font-size: 8px;
+          letter-spacing: 0.18em;
+        }
+
+        .product-info h3 {
+          margin: 0;
+          color: #f3efe8;
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: 0.02em;
+        }
+
+        .product-info strong {
+          color: #EFBF04;
+          font-size: 13px;
+          font-weight: 500;
+          white-space: nowrap;
+        }
+
+        .empty-state,
+        .load-error-state {
+          text-align: center;
+          padding: 95px 20px 110px;
+          border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .empty-icon {
+          color: #EFBF04;
+          font-size: 35px;
+          margin-bottom: 20px;
+        }
+
+        .empty-state h2,
+        .load-error-state h2 {
+          margin: 13px 0 12px;
+          font-family: Georgia, "Times New Roman", serif;
+          font-weight: 400;
+          font-size: clamp(35px, 4vw, 58px);
+          line-height: 1.05;
+        }
+
+        .empty-state h2 span,
+        .load-error-state h2 span {
+          color: #EFBF04;
+        }
+
+        .empty-state small,
+        .load-error-state small {
+          color: rgba(255, 255, 255, 0.4);
+          font-size: 13px;
+        }
+
+        .browse-button {
+          margin-top: 30px;
+          border-color: rgba(239, 191, 4, 0.5);
+          background: rgba(239, 191, 4, 0.06);
+          color: #EFBF04;
+        }
+
+        .browse-button:hover {
+          background: #EFBF04;
+          color: #000000;
+        }
+
+        @keyframes reveal {
+          from {
+            opacity: 0;
+            transform: translateY(22px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @media (max-width: 1050px) {
+          .results-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 720px) {
+  /* ZELORA vibrant gold — mobile */
+  .search-page .back-link:hover,
+  .search-page .eyebrow,
+  .search-page .search-meta,
+  .search-page .results-header p,
+  .search-page .search-intro > p,
+  .search-page .empty-state > p,
+  .search-page .load-error-state > p,
+  .search-page .category,
+  .search-page .search-heading h1 span,
+  .search-page .search-box > svg,
+  .search-page .intro-mark,
+  .search-page .results-header h2 span,
+  .search-page .wishlist:hover,
+  .search-page .wishlist.active,
+  .search-page .product-info strong,
+  .search-page .empty-icon,
+  .search-page .empty-state h2 span,
+  .search-page .load-error-state h2 span,
+  .search-page .browse-button {
+    color: #EFBF04 !important;
+  }
+
+  .search-page .search-box:focus-within,
+  .search-page .search-box.has-value {
+    border-color: rgba(239,191,4,.72);
+    box-shadow:
+      0 0 0 1px rgba(239,191,4,.08),
+      0 22px 90px rgba(239,191,4,.12);
+  }
+
+  .search-page .clear-button:hover {
+    border-color: rgba(239,191,4,.6);
+    color: #EFBF04;
+  }
+
+  .search-page .suggestions button:hover,
+  .search-page .view-all:hover,
+  .search-page .browse-button:hover {
+    color: #000 !important;
+    border-color: #EFBF04 !important;
+    background: #EFBF04 !important;
+  }
+
+  .search-page .wishlist:hover,
+  .search-page .wishlist.active {
+    border-color: rgba(239,191,4,.65) !important;
+  }
+
+          .search-shell {
+            width: min(100% - 34px, 600px);
+            padding-top: 26px;
+          }
+
+          .search-heading {
+            padding: 58px 0 36px;
+          }
+
+          .search-heading h1 {
+            font-size: clamp(47px, 14vw, 68px);
+          }
+
+          .intro {
+            font-size: 13px;
+          }
+
+          .search-box {
+            height: 64px;
+            padding: 0 17px;
+            gap: 13px;
+            border-radius: 999px;
+          }
+
+          .search-box input {
+            font-size: 13px;
+          }
+
+          .search-meta {
+            font-size: 7px;
+          }
+
+          .search-intro {
+            padding-top: 75px;
+          }
+
+          .suggestions {
+            gap: 8px;
+          }
+
+          .results-section {
+            padding-top: 52px;
+          }
+
+          .results-header {
+            display: block;
+            margin-bottom: 22px;
+          }
+
+          .view-all {
+            margin-top: 18px;
+          }
+
+          .results-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px 12px;
+          }
+
+          .image-wrap {
+            aspect-ratio: 0.76;
+          }
+
+          .product-tag {
+            top: 10px;
+            left: 10px;
+            padding: 6px 8px;
+            font-size: 7px;
+          }
+
+          .wishlist {
+            top: 8px;
+            right: 8px;
+            width: 36px;
+            height: 36px;
+          }
+
+          .wishlist svg {
+            width: 16px;
+            height: 16px;
+          }
+
+          .view-piece {
+            display: none;
+          }
+
+          .product-info {
+            display: block;
+            padding-top: 11px;
+          }
+
+          .product-info strong {
+            display: block;
+            margin-top: 8px;
+          }
+
+          .product-info h3 {
+            font-size: 12px;
+            line-height: 1.35;
+          }
+
+          .empty-state,
+          .load-error-state {
+            padding: 75px 5px;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .product-card,
+          .image-wrap > img,
+          .view-piece,
+          .clear-button,
+          .search-box {
+            animation: none !important;
+            transition: none !important;
+          }
+        }

@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "zelora",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-18",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "zelora-db",
+      "database_id": "e5a74dee-4553-43de-a1bd-299c8887db9f"
+    }
+  ]
+}

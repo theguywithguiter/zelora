@@ -1,0 +1,564 @@
+ "use client";
+
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import styles from "./ShopPage.module.css";
+
+type Product = {
+  id: number;
+  name: string;
+  slug?: string | null;
+  category?: unknown;
+  price: number;
+  stock?: number;
+  image?: string | null;
+  description?: unknown;
+  images?: Array<{ url: string; position?: number }> | null;
+};
+
+type Category = {
+  id: number;
+  name: string;
+  slug: string;
+  image?: string | null;
+};
+
+const FALLBACK_IMAGE =
+  "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1200&q=88";
+
+function textValue(value: unknown, fallback = "") {
+  if (typeof value === "string") return value;
+  if (typeof value === "number") return String(value);
+
+  if (value && typeof value === "object") {
+    const object = value as Record<string, unknown>;
+
+    for (const key of ["name", "title", "label", "slug", "value", "category"]) {
+      if (typeof object[key] === "string") {
+        return object[key] as string;
+      }
+    }
+  }
+
+  return fallback;
+}
+
+function normalizeProduct(item: any): Product {
+  const images = Array.isArray(item?.images)
+    ? item.images
+        .filter((image: any) => image && typeof image.url === "string")
+        .sort(
+          (a: any, b: any) =>
+            Number(a.position ?? 0) - Number(b.position ?? 0)
+        )
+    : [];
+
+  return {
+    id: Number(item?.id ?? 0),
+    name: String(item?.name ?? "ZELORA Piece"),
+    slug: typeof item?.slug === "string" ? item.slug : null,
+    category: item?.category ?? null,
+    price: Number(item?.price ?? 0),
+    stock: Number(item?.stock ?? 0),
+    image:
+      typeof item?.image === "string"
+        ? item.image
+        : images[0]?.url ?? null,
+    description: item?.description ?? null,
+    images,
+  };
+}
+
+
+function ArrowIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 12h14" />
+      <path d="m13 6 6 6-6 6" />
+    </svg>
+  );
+}
+
+function HeartIcon({ filled = false }: { filled?: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={filled ? styles.heartFilled : ""}>
+      <path d="M20.8 8.8c0 5-8.8 10.2-8.8 10.2S3.2 13.8 3.2 8.8A4.6 4.6 0 0 1 12 6.2a4.6 4.6 0 0 1 8.8 2.6Z" />
+    </svg>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="m16 16 5 5" />
+    </svg>
+  );
+}
+
+function FilterIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 6h16M7 12h10M10 18h4" />
+    </svg>
+  );
+}
+
+export default function ShopPage() {
+  const searchParams = useSearchParams();
+  const requestedCategory = searchParams.get("category")?.trim() || "ALL";
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [category, setCategory] = useState(requestedCategory);
+  const [sort, setSort] = useState("featured");
+  const [query, setQuery] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [wishlist, setWishlist] = useState<number[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("zelora-wishlist");
+      if (saved) setWishlist(JSON.parse(saved));
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("zelora-wishlist", JSON.stringify(wishlist));
+  }, [wishlist]);
+
+  useEffect(() => {
+    const requested = searchParams.get("category")?.trim() || "ALL";
+    setCategory(requested);
+  }, [searchParams]);
+
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const response = await fetch("/api/admin/categories", {
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to load categories");
+        }
+
+        const data = await response.json();
+        const raw = Array.isArray(data?.categories)
+          ? data.categories
+          : [];
+
+        const normalized: Category[] = raw
+          .map((item: any) => ({
+            id: Number(item?.id ?? 0),
+            name: String(item?.name ?? "").trim(),
+            slug: String(item?.slug ?? "").trim(),
+            image:
+              typeof item?.image === "string"
+                ? item.image
+                : null,
+          }))
+          .filter(
+            (item: Category) =>
+              item.id > 0 && item.name && item.slug
+          );
+
+        setCategories(normalized);
+
+        const requested = searchParams.get("category")?.trim() || "ALL";
+        if (
+          requested !== "ALL" &&
+          !normalized.some((item) => item.slug === requested)
+        ) {
+          setCategory("ALL");
+        }
+      } catch (error) {
+        console.error("Shop categories error:", error);
+        setCategories([]);
+      }
+    }
+
+    loadCategories();
+  }, [searchParams]);
+
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/admin/products", {
+          cache: "no-store",
+        });
+
+        if (!response.ok) throw new Error("Failed to load products");
+
+        const data = await response.json();
+        const raw = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.products)
+            ? data.products
+            : [];
+
+        setProducts(
+          raw
+            .map((item: any) => normalizeProduct(item?.product ?? item))
+            .filter((item: Product) => item.id && item.name)
+        );
+      } catch (error) {
+        console.error("Shop products error:", error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProducts();
+  }, []);
+
+  const filteredProducts = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    let result = products.filter((product) => {
+      const productCategory = textValue(product.category).toLowerCase();
+      const name = textValue(product.name).toLowerCase();
+      const description = textValue(product.description).toLowerCase();
+
+      const selectedCategory = categories.find(
+        (item) => item.slug === category
+      );
+
+      const selectedCategoryName =
+        selectedCategory?.name.toLowerCase() ?? "";
+
+      const matchesCategory =
+        category === "ALL" ||
+        productCategory === selectedCategoryName ||
+        productCategory.includes(selectedCategoryName);
+
+      const matchesSearch =
+        !normalizedQuery ||
+        name.includes(normalizedQuery) ||
+        productCategory.includes(normalizedQuery) ||
+        description.includes(normalizedQuery);
+
+      return matchesCategory && matchesSearch;
+    });
+
+    if (sort === "price-low") {
+      result = [...result].sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (sort === "price-high") {
+      result = [...result].sort((a, b) => Number(b.price) - Number(a.price));
+    } else if (sort === "name") {
+      result = [...result].sort((a, b) =>
+        textValue(a.name, "").localeCompare(textValue(b.name, ""))
+      );
+    } else {
+      result = [...result].sort((a, b) => a.id - b.id);
+    }
+
+    return result;
+  }, [products, category, query, sort]);
+
+  function toggleWishlist(id: number) {
+    setWishlist((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    );
+  }
+
+  return (
+    <main className={styles.page}>
+      <div className={styles.ambientGlow} />
+
+      {/* TOP STORY STRIP */}
+      <section className={styles.hero}>
+        <div className={styles.heroImage}>
+          <img
+            src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=2200&q=90"
+            alt=""
+          />
+        </div>
+
+        <div className={styles.heroOverlay} />
+
+        <div className={styles.heroContent}>
+          <p className={styles.eyebrow}>THE ZELORA COLLECTION</p>
+          <h1>
+            Pieces made
+            <span> personal.</span>
+          </h1>
+          <p className={styles.heroText}>
+            Discover personalized jewelry and accessories crafted to carry
+            your story wherever you go.
+          </p>
+
+          <a href="#collection" className={`${styles.pillButton} ${styles.goldPill}`}>
+            Explore collection
+            <ArrowIcon />
+          </a>
+        </div>
+
+        <div className={styles.heroMeta}>
+          <span>01</span>
+          <i />
+          <span>CURATED FOR YOU</span>
+        </div>
+      </section>
+
+      {/* SHOP HEADER */}
+      <section className={styles.shopHeader} id="collection">
+        <div>
+          <p className={styles.eyebrow}>SHOP ZELORA</p>
+          <h2>Find your signature.</h2>
+          <p className={styles.muted}>
+            Premium pieces. Personal details. Made to mean something.
+          </p>
+        </div>
+
+        <div className={styles.headerCount}>
+          <strong>{filteredProducts.length}</strong>
+          <span>pieces</span>
+        </div>
+      </section>
+
+      {/* CONTROLS */}
+      <section className={styles.controls}>
+        <div className={styles.categoryRail}>
+          <button
+            type="button"
+            className={`${styles.categoryButton} ${
+              category === "ALL" ? styles.categoryActive : ""
+            }`}
+            onClick={() => setCategory("ALL")}
+          >
+            ALL
+          </button>
+
+          {categories.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={`${styles.categoryButton} ${
+                category === item.slug ? styles.categoryActive : ""
+              }`}
+              onClick={() => setCategory(item.slug)}
+            >
+              {item.name}
+            </button>
+          ))}
+        </div>
+
+        <div className={styles.controlRight}>
+          <div className={`${styles.searchBox} ${query ? styles.searchFocused : ""}`}>
+            <SearchIcon />
+            <input
+  suppressHydrationWarning
+  value={query}
+  onChange={(event) => setQuery(event.target.value)}
+  placeholder="Search pieces"
+  aria-label="Search products"
+/>
+            {query && (
+              <button
+                type="button"
+                className={styles.clearSearch}
+                onClick={() => setQuery("")}
+                aria-label="Clear search"
+              >
+                ×
+              </button>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className={`${styles.filterPill} ${showFilters ? styles.filterActive : ""}`}
+            onClick={() => setShowFilters((value) => !value)}
+          >
+            <FilterIcon />
+            Filter
+          </button>
+        </div>
+      </section>
+
+      {/* SORT PANEL */}
+      <div className={`${styles.sortPanel} ${showFilters ? styles.sortOpen : ""}`}>
+        <div>
+          <span>Sort by</span>
+          <button
+            className={sort === "featured" ? styles.sortSelected : ""}
+            onClick={() => setSort("featured")}
+          >
+            Featured
+          </button>
+          <button
+            className={sort === "price-low" ? styles.sortSelected : ""}
+            onClick={() => setSort("price-low")}
+          >
+            Price: Low to High
+          </button>
+          <button
+            className={sort === "price-high" ? styles.sortSelected : ""}
+            onClick={() => setSort("price-high")}
+          >
+            Price: High to Low
+          </button>
+          <button
+            className={sort === "name" ? styles.sortSelected : ""}
+            onClick={() => setSort("name")}
+          >
+            Name
+          </button>
+        </div>
+      </div>
+
+      {/* PRODUCT GRID */}
+      <section className={styles.productsSection}>
+        {loading ? (
+          <div className={styles.loadingGrid}>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div className={styles.skeletonCard} key={index}>
+                <div className={styles.skeletonImage} />
+                <div className={styles.skeletonLine} />
+                <div className={styles.skeletonShort} />
+              </div>
+            ))}
+          </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className={styles.emptyState}>
+            <span>✦</span>
+            <p>No pieces found.</p>
+            <small>Try another search or collection.</small>
+            <button
+              className={styles.pillButton}
+              onClick={() => {
+                setQuery("");
+                setCategory("ALL");
+              }}
+            >
+              Reset collection
+              <ArrowIcon />
+            </button>
+          </div>
+        ) : (
+          <div className={styles.grid}>
+            {filteredProducts.map((product, index) => {
+              const isWishlisted = wishlist.includes(product.id);
+
+              return (
+                <article
+                  className={styles.productCard}
+                  key={product.id}
+                  style={{ animationDelay: `${Math.min(index, 9) * 55}ms` }}
+                >
+                  <Link href={`/shop/${product.id}`} className={styles.imageLink}>
+                    <div className={styles.imageWrap}>
+                      <img
+                        src={product.image || FALLBACK_IMAGE}
+                        alt={textValue(product.name, "ZELORA piece")}
+                        className={styles.productImage}
+                      />
+
+                      <div className={styles.imageShade} />
+
+                      <div className={styles.cardTop}>
+                        <span className={styles.productTag}>
+                          {index < 3 ? "CUSTOMISED" : "CRAFTED"}
+                        </span>
+
+                        <button
+                          type="button"
+                          className={`${styles.wishlist} ${
+                            isWishlisted ? styles.wishlistActive : ""
+                          }`}
+                          aria-label={
+                            isWishlisted
+                              ? `Remove ${textValue(product.name, "this piece")} from wishlist`
+                              : `Add ${textValue(product.name, "this piece")} to wishlist`
+                          }
+                          onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            toggleWishlist(product.id);
+                          }}
+                        >
+                          <HeartIcon filled={isWishlisted} />
+                        </button>
+                      </div>
+
+                      <div className={styles.quickView}>
+                        <span>VIEW PIECE</span>
+                        <ArrowIcon />
+                      </div>
+                    </div>
+                  </Link>
+
+                  <div className={styles.productInfo}>
+                    <div>
+                      <p className={styles.productCategory}>
+                        {textValue(product.category, "ZELORA")}
+                      </p>
+                      <Link href={`/shop/${product.id}`} className={styles.productName}>
+                        {textValue(product.name, "ZELORA Piece")}
+                      </Link>
+                    </div>
+
+                    <div className={styles.priceBlock}>
+                      <span>₹{Number(product.price).toLocaleString("en-IN")}</span>
+                    </div>
+
+                    <div className={styles.ratingRow}>
+                      <span className={styles.stars}>★★★★★</span>
+                      <span className={styles.reviewCount}>
+                        ({50 + ((product.id * 19) % 140)})
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* EDITORIAL BANNER */}
+      <section className={styles.editorial}>
+        <div className={styles.editorialImage}>
+          <img
+            src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=2200&q=90"
+            alt=""
+          />
+        </div>
+        <div className={styles.editorialOverlay} />
+
+        <div className={styles.editorialContent}>
+          <p className={styles.eyebrow}>MADE FOR YOUR STORY</p>
+          <h2>
+            Personal is
+            <br />
+            <span>the new luxury.</span>
+          </h2>
+          <p>
+            Choose your piece. Add the detail. Make something nobody else
+            could call theirs.
+          </p>
+          <Link href="/personalize" className={styles.pillButton}>
+            Personalize yours
+            <ArrowIcon />
+          </Link>
+        </div>
+      </section>
+
+      {/* FOOT NOTE */}
+      <section className={styles.bottomStatement}>
+        <p className={styles.eyebrow}>ZELORA / CRAFTED FOR EVERY STORY</p>
+        <h2>
+          Wear something
+          <span> that means more.</span>
+        </h2>
+      </section>
+    </main>
+  );
+}
